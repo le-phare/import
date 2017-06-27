@@ -1,6 +1,6 @@
 # Import library
 
-This library provide a efficient way to import CSV/Excel files in a database (MySQL and PostgreSQL)
+This library provide an efficient way to import CSV/Excel files in a database (MySQL and PostgreSQL)
 
 ## Installation
 
