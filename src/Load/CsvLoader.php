@@ -24,6 +24,7 @@ class CsvLoader
         $fields = array_map(function ($v) use ($connection) {
             $v = Transliterator::urlize($v, '_');
             $v = $connection->quoteIdentifier($v);
+
             return $v;
         }, array_keys($resource->getCsvFields()));
         $fields = implode(',', $fields);
@@ -33,6 +34,8 @@ class CsvLoader
         $fieldDelimiter = $connection->quote($resource->getFieldDelimiter());
         $lineDelimiter = $connection->quote($resource->getLineDelimiter());
         $quoteCharacter = $connection->quote($resource->getQuoteCharacter());
+        $escapeCharacter = $connection->quote($resource->getEscapeCharacter());
+        $nullString = $connection->quote($resource->getNullString());
 
         if ('mysql' === $platform->getName()) {
             if (!class_exists('\MySQLi')) {
@@ -50,9 +53,9 @@ class CsvLoader
                 $connection->getDatabase()
             );
 
-            $header = "";
+            $header = '';
             if ($resource->getConfig()['load']['format_options']['with_header']) {
-                $header = "IGNORE 1 LINES";
+                $header = 'IGNORE 1 LINES';
             }
 
             $sql = "
@@ -60,6 +63,7 @@ class CsvLoader
                 FIELDS TERMINATED BY $fieldDelimiter
                 OPTIONALLY ENCLOSED BY $quoteCharacter
                 LINES TERMINATED BY $lineDelimiter
+                ESCAPED BY $escapeCharacter
                 $header ($fields)
                 SET file_line_no = CONCAT($from,':',@row:=@row+1)
             ";
@@ -93,7 +97,8 @@ class CsvLoader
             // Date format
             pg_query($pg, "SET datestyle = 'ISO, DMY'");
 
-            $header = $resource->getConfig()['load']['format_options']['with_header'];
+            $format = $resource->getConfig()['load']['format_options']['pgsql_format'];
+            $header = $resource->getConfig()['load']['format_options']['with_header'] ? 'HEADER,' : '';
 
             $sql = "
                 COPY $tablename ($fields)
@@ -102,25 +107,25 @@ class CsvLoader
                     FORMAT csv,
                     QUOTE $quoteCharacter,
                     DELIMITER $fieldDelimiter,
-                    NULL '',
-                    HEADER $header
+                    ESCAPE $escapeCharacter,
+                    $header
+                    NULL $nullString
                 )
             ";
-
             pg_query($pg, $sql);
 
             // Iterate file to put lines
             $fp = fopen($file, 'r');
             $loaded = 0;
-            do {
+            while (!feof($fp)) {
                 pg_put_line($pg, Encoding::toUTF8(fgets($fp)));
-                $loaded += 1;
-            } while (!feof($fp));
+                ++$loaded;
+            }
             fclose($fp);
             pg_end_copy($pg);
             pg_close($pg);
         } else {
-            throw new ImportException($platform->getName(). " platform is not supported");
+            throw new ImportException($platform->getName().' platform is not supported');
         }
 
         return $loaded;

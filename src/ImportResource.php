@@ -80,6 +80,16 @@ class ImportResource
         return $this->config['load']['format_options']['quote_character'];
     }
 
+    public function getEscapeCharacter()
+    {
+        return $this->config['load']['format_options']['escape_character'];
+    }
+
+    public function getNullString()
+    {
+        return $this->config['load']['format_options']['null_string'];
+    }
+
     public function isLoopable()
     {
         return $this->config['load']['loop'];

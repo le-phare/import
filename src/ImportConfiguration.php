@@ -119,12 +119,14 @@ class ImportConfiguration implements ConfigurationInterface
                                             ->booleanNode('with_header')->defaultTrue()->end()
                                             ->booleanNode('validate_headers')->defaultTrue()->end()
                                             ->integerNode('sheet_index')->defaultValue(0)->end()
+                                            ->scalarNode('null_string')->defaultValue('')->end()
                                             ->scalarNode('field_delimiter')
                                                 ->defaultValue(';')
                                                 ->validate()
                                                     ->ifString()
                                                     ->then(function ($v) {
                                                         eval("\$delimiter = \"$v\";");
+
                                                         return $delimiter;
                                                     })
                                                 ->end()
@@ -145,6 +147,18 @@ class ImportConfiguration implements ConfigurationInterface
                                                     ->ifString()
                                                     ->then(function ($v) {
                                                         eval("\$delimiter = \"$v\";");
+
+                                                        return $delimiter;
+                                                    })
+                                                ->end()
+                                            ->end()
+                                            ->scalarNode('escape_character')
+                                                ->defaultValue('\\')
+                                                ->validate()
+                                                    ->ifString()
+                                                    ->then(function ($v) {
+                                                        eval("\$delimiter = \"$v\";");
+
                                                         return $delimiter;
                                                     })
                                                 ->end()
