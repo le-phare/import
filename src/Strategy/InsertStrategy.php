@@ -31,7 +31,7 @@ class InsertStrategy implements StrategyInterface
         foreach ($resource->getMapping() as $name => $properties) {
             foreach ($properties['property'] as $property) {
                 if ($resource->isUpdateableField($property)) {
-                    $updateClause[] = $this->connection->quoteIdentifier($property) .' = temp.'.$this->connection->quoteIdentifier($name);
+                    $updateClause[] = $this->connection->quoteIdentifier($property).' = temp.'.$this->connection->quoteIdentifier($name);
                 }
                 $columns[] = $this->connection->quoteIdentifier($property);
 
@@ -44,7 +44,7 @@ class InsertStrategy implements StrategyInterface
         $updateClause = implode(',', $updateClause);
 
         $whereClause = null !== $resource->getCopyCondition() ?
-            'WHERE '. $resource->getCopyCondition() : ''
+            'WHERE '.$resource->getCopyCondition() : ''
         ;
 
         $joins = $resource->getJoins();

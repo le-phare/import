@@ -255,7 +255,7 @@ class Import
 
             $formatLoader = new ExcelLoader($connection);
         } else {
-            throw new ImportException($resource->getFormat(). " format is not supported");
+            throw new ImportException($resource->getFormat().' format is not supported');
         }
 
         return $formatLoader->load($resource, $file);

@@ -4,7 +4,7 @@ namespace LePhare\Import\Strategy;
 
 class StrategyRepository implements StrategyRepositoryInterface
 {
-    private $strategies = array();
+    private $strategies = [];
 
     public function addStrategy(StrategyInterface $strategy)
     {

@@ -43,7 +43,7 @@ class ImportResource
     {
         $table = new Table($this->getTablename());
 
-        $table->addColumn('file_line_no', 'string', [ 'notnull' => false ]);
+        $table->addColumn('file_line_no', 'string', ['notnull' => false]);
 
         foreach ($this->config['load']['fields'] as $field => $definition) {
             $table->addColumn(Transliterator::urlize($field, '_'), $definition['type'], $definition['options']);
@@ -178,7 +178,6 @@ class ImportResource
         if (!$this->config['load']['loop']) {
             $files = array_slice($files, 0, 1);
         }
-
 
         return $files;
     }

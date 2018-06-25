@@ -137,6 +137,7 @@ class ImportConfiguration implements ConfigurationInterface
                                                     ->ifString()
                                                     ->then(function ($v) {
                                                         eval("\$delimiter = \"$v\";");
+
                                                         return $delimiter;
                                                     })
                                                 ->end()
@@ -163,7 +164,7 @@ class ImportConfiguration implements ConfigurationInterface
                                                     })
                                                 ->end()
                                             ->end()
-                                            ->scalarNode('pgsql_format')->defaultValue("csv")->end()
+                                            ->scalarNode('pgsql_format')->defaultValue('csv')->end()
                                         ->end()
                                     ->end()
                                     ->booleanNode('loop')->defaultFalse()->end()
@@ -179,7 +180,7 @@ class ImportConfiguration implements ConfigurationInterface
                                     ->append($this->addColumnsNode('extra_fields'))
 
                                     ->variableNode('indexes')
-                                        ->defaultValue(array())
+                                        ->defaultValue([])
                                     ->end()
 
                                 ->end()
@@ -203,7 +204,7 @@ class ImportConfiguration implements ConfigurationInterface
                                             ->scalarNode('joins')->defaultValue('')->end()
                                             ->scalarNode('conflict_target')->defaultValue('')->end()
                                             ->variableNode('non_updateable_fields')
-                                                ->defaultValue(array())
+                                                ->defaultValue([])
                                             ->end()
                                         ->end()
                                     ->end()
@@ -216,7 +217,7 @@ class ImportConfiguration implements ConfigurationInterface
                                             ->beforeNormalization()
                                                 ->ifString()
                                                 ->then(function ($v) {
-                                                    return array('property'=> $v);
+                                                    return ['property' => $v];
                                                 })
                                             ->end()
                                             ->children()
@@ -226,7 +227,7 @@ class ImportConfiguration implements ConfigurationInterface
                                                     ->beforeNormalization()
                                                         ->ifString()
                                                         ->then(function ($v) {
-                                                            return array($v);
+                                                            return [$v];
                                                         })
                                                     ->end()
                                                 ->end()

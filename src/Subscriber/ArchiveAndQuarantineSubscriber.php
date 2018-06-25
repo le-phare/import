@@ -12,7 +12,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            ImportEvents::POST_COPY => ['onPostCopy', -128] // Ultra low priority
+            ImportEvents::POST_COPY => ['onPostCopy', -128], // Ultra low priority
         ];
     }
 
@@ -36,7 +36,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
             return $resource->isArchivable();
         });
 
-        if (count($archivableResources) === 0) {
+        if (0 === count($archivableResources)) {
             return;
         }
 
@@ -66,7 +66,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
                     $logger->debug(sprintf('File %s successfully archived', $sourceFile->getBasename()));
                 }
 
-                $archived++;
+                ++$archived;
             }
         }
 
@@ -86,7 +86,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
             return $resource->isQuarantinable();
         });
 
-        if (count($quarantinableResources) === 0) {
+        if (0 === count($quarantinableResources)) {
             return;
         }
 
@@ -115,7 +115,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
                     $logger->warning(sprintf('Extra file found. Put %s into quarantine.', $quarantinableFile->getBasename()));
                 }
 
-                $quarantined++;
+                ++$quarantined;
             }
         }
 
@@ -159,7 +159,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
      */
     protected function removeDir($dir)
     {
-        $files = array_diff(scandir($dir), array('.', '..'));
+        $files = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
             (is_dir("$dir/$file")) ? $this->removeDir("$dir/$file") : unlink("$dir/$file");

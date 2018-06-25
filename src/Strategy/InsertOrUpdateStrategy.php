@@ -45,8 +45,8 @@ class InsertOrUpdateStrategy implements StrategyInterface
             foreach ($properties['property'] as $property) {
                 if ($resource->isUpdateableField($property)) {
                     $fieldUpdateclause = $properties['update_sql'] ?
-                        $this->connection->quoteIdentifier($property) .' = '.$properties['update_sql']:
-                        $this->connection->quoteIdentifier($property) .' = VALUES('.$property.')';
+                        $this->connection->quoteIdentifier($property).' = '.$properties['update_sql'] :
+                        $this->connection->quoteIdentifier($property).' = VALUES('.$property.')';
 
                     $updateClause[] = $fieldUpdateclause;
                 }
@@ -60,7 +60,7 @@ class InsertOrUpdateStrategy implements StrategyInterface
         $tempColumns = implode(',', $tempColumns);
         $updateClause = implode(',', $updateClause);
 
-        $whereClause = $resource->getCopyCondition() ? 'WHERE '. $resource->getCopyCondition(): '';
+        $whereClause = $resource->getCopyCondition() ? 'WHERE '.$resource->getCopyCondition() : '';
         $joins = $resource->getJoins();
         $distinct = $resource->isDistinct() ? 'DISTINCT' : '';
 
@@ -93,14 +93,14 @@ class InsertOrUpdateStrategy implements StrategyInterface
             foreach ($properties['property'] as $property) {
                 if ($resource->isUpdateableField($property)) {
                     $fieldUpdateclause = $properties['update_sql'] ?
-                        $this->connection->quoteIdentifier($property) .' = '.$properties['update_sql']:
-                        $this->connection->quoteIdentifier($property) .' = excluded.' . $this->connection->quoteIdentifier($property);
+                        $this->connection->quoteIdentifier($property).' = '.$properties['update_sql'] :
+                        $this->connection->quoteIdentifier($property).' = excluded.'.$this->connection->quoteIdentifier($property);
 
                     $updateClause[] = $fieldUpdateclause;
                 }
                 $columns[] = $this->connection->quoteIdentifier($property);
 
-                $tempColumns[] = $properties['sql'] ? $properties['sql'] . ' as '.$name: $this->connection->quoteIdentifier($name);
+                $tempColumns[] = $properties['sql'] ? $properties['sql'].' as '.$name : $this->connection->quoteIdentifier($name);
             }
         }
 
@@ -108,7 +108,7 @@ class InsertOrUpdateStrategy implements StrategyInterface
         $tempColumns = implode(',', $tempColumns);
         $updateClause = implode(',', $updateClause);
 
-        $whereClause = $resource->getCopyCondition() ? 'WHERE '. $resource->getCopyCondition(): '';
+        $whereClause = $resource->getCopyCondition() ? 'WHERE '.$resource->getCopyCondition() : '';
         $joins = $resource->getJoins();
         $conflictTargetClause = $resource->getConflictTarget() ?: '';
         $distinct = $resource->isDistinct() ? 'DISTINCT' : '';

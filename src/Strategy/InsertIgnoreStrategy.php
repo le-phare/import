@@ -45,7 +45,7 @@ class InsertIgnoreStrategy implements StrategyInterface
         foreach ($resource->getMapping() as $name => $properties) {
             foreach ($properties['property'] as $property) {
                 if ($resource->isUpdateableField($property)) {
-                    $updateClause[] = $this->connection->quoteIdentifier($property) .' = temp.'.$this->connection->quoteIdentifier($name);
+                    $updateClause[] = $this->connection->quoteIdentifier($property).' = temp.'.$this->connection->quoteIdentifier($name);
                 }
                 $columns[] = $this->connection->quoteIdentifier($property);
 
@@ -58,7 +58,7 @@ class InsertIgnoreStrategy implements StrategyInterface
         $updateClause = implode(',', $updateClause);
 
         $whereClause = null !== $resource->getCopyCondition() ?
-            'WHERE '. $resource->getCopyCondition() : ''
+            'WHERE '.$resource->getCopyCondition() : ''
         ;
 
         $joins = $resource->getJoins();
@@ -94,7 +94,7 @@ class InsertIgnoreStrategy implements StrategyInterface
         foreach ($resource->getMapping() as $name => $properties) {
             foreach ($properties['property'] as $property) {
                 if ($resource->isUpdateableField($property)) {
-                    $fieldUpdateclause = $this->connection->quoteIdentifier($property) .' = excluded.' . $this->connection->quoteIdentifier($property);
+                    $fieldUpdateclause = $this->connection->quoteIdentifier($property).' = excluded.'.$this->connection->quoteIdentifier($property);
 
                     $updateClause[] = $fieldUpdateclause;
                 }
@@ -108,7 +108,7 @@ class InsertIgnoreStrategy implements StrategyInterface
         $tempColumns = implode(',', $tempColumns);
         $updateClause = implode(',', $updateClause);
 
-        $whereClause = $resource->getCopyCondition() ? 'WHERE '. $resource->getCopyCondition(): '';
+        $whereClause = $resource->getCopyCondition() ? 'WHERE '.$resource->getCopyCondition() : '';
         $joins = $resource->getJoins();
         $conflictTargetClause = $resource->getConflictTarget() ?: '';
 

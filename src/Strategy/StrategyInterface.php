@@ -6,6 +6,5 @@ interface StrategyInterface
 {
     public function getName();
 
-
     public function copy($resource);
 }

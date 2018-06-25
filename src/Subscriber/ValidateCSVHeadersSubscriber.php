@@ -31,7 +31,7 @@ class ValidateCSVHeadersSubscriber implements EventSubscriberInterface
 
         $fh = fopen($file, 'r+');
         $bom = fread($fh, 3);
-        if ($bom != b"\xEF\xBB\xBF") {
+        if (b"\xEF\xBB\xBF" != $bom) {
             fseek($fh, 0);
         }
 
@@ -44,7 +44,7 @@ class ValidateCSVHeadersSubscriber implements EventSubscriberInterface
         if (count($diff) > 0) {
             $event->setValid(false);
             $logger->warning(
-                sprintf("Unexpected columns : %s - %s", $file->getBasename(), implode(', ', $diff))
+                sprintf('Unexpected columns : %s - %s', $file->getBasename(), implode(', ', $diff))
             );
         }
 
@@ -52,7 +52,7 @@ class ValidateCSVHeadersSubscriber implements EventSubscriberInterface
         if (count($diff) > 0) {
             $event->setValid(false);
             $logger->warning(
-                sprintf("Expected columns not found : %s - %s", $file->getBasename(), implode(', ', $diff))
+                sprintf('Expected columns not found : %s - %s', $file->getBasename(), implode(', ', $diff))
             );
         }
     }

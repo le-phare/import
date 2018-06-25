@@ -24,6 +24,7 @@ class TextLoader
         $fields = array_map(function ($v) use ($connection) {
             $v = Transliterator::urlize($v, '_');
             $v = $connection->quoteIdentifier($v);
+
             return $v;
         }, array_keys($resource->getCsvFields()));
         $fields = implode(',', $fields);
@@ -65,13 +66,13 @@ class TextLoader
             $loaded = 0;
             do {
                 pg_put_line($pg, Encoding::toUTF8(fgets($fp)));
-                $loaded += 1;
+                ++$loaded;
             } while (!feof($fp));
             fclose($fp);
             pg_end_copy($pg);
             pg_close($pg);
         } else {
-            throw new ImportException($platform->getName(). " platform is not supported");
+            throw new ImportException($platform->getName().' platform is not supported');
         }
 
         return $loaded;

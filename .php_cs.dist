@@ -1,0 +1,19 @@
+<?php
+
+$finder = PhpCsFixer\Finder::create()
+    ->in(__DIR__.'/src')
+    ->notPath('/.*\/Resources\/.*/')
+;
+
+return PhpCsFixer\Config::create()
+    ->setRules(array(
+        '@PSR2' => true,
+        '@Symfony' => true,
+        'phpdoc_align' => false,
+        'phpdoc_scalar' => false,
+        'phpdoc_summary' => false,
+        'no_unused_imports' => true,
+        'array_syntax' => array('syntax' => 'short'),
+    ))
+    ->setFinder($finder)
+;
