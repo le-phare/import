@@ -1,0 +1,9 @@
+# Config Phpstan
+
+parameters:
+    level: 5
+    paths:
+        - .
+    excludePaths:
+        - vendor
+    tmpDir: .phpstan.cache
