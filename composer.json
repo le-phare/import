@@ -3,7 +3,7 @@
     "description": "Import CSV/XLS files",
     "keywords": ["import", "csv", "xls", "excel", "database"],
     "type": "library",
-    "license": "proprietary",
+    "license": "MIT",
     "authors": [
         {
             "name": "Le Phare",
