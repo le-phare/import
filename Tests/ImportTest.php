@@ -69,22 +69,6 @@ final class ImportTest extends TestCase
         $this->assertInstanceOf(ImportInterface::class, $this->import);
     }
 
-    /**
-     * @group legacy
-     *
-     * @return never
-     */
-    public function testDeprecation(): void
-    {
-        $this->markTestSkipped('Removed in lephare/import 2.0');
-        file_put_contents('/tmp/config.yml', Yaml::dump(self::config)); // @phpstan-ignore-line
-        $this->expectDeprecation('Since lephare/import 1.18.0: The config parameter must be an array now. Please use Yaml::parse() to parse the config file.');
-        $this->import->init('/tmp/config.yml');
-        $config = $this->import->getConfig();
-        $this->assertInstanceOf(\Traversable::class, $config);
-        $this->assertSame(self::config['name'], $config['name']);
-    }
-
     public function testInit(): void
     {
         $this->import->init(self::config);
