@@ -186,7 +186,7 @@ class CsvLoader implements LoaderInterface
     {
         $config = $resource->getConfig();
         $useFirstRowAsHeader = $config['load']['format_options']['with_header'] && $config['load']['format_options']['validate_headers'];
-        $headers = $useFirstRowAsHeader ? $this->getFirstRow($resource, $context) : $resource->getCsvFields();
+        $headers = $useFirstRowAsHeader ? $this->getFirstRow($resource, $context) : array_keys($resource->getCsvFields());
 
         if ($useFirstRowAsHeader && (count($headers) !== count($resource->getCsvFields()) || [] !== array_diff($headers, array_keys($resource->getCsvFields())) || [] !== array_diff(array_keys($resource->getCsvFields()), $headers))) {
             throw new ImportException('The first row of the CSV file must contain the same fields as defined in the configuration');
