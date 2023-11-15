@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file.
 
+## 2.0.1 (2023-11-15)
+
+### Bug Fixes
+
+* **import:**  fix: CSV Loader crash when there is no validation of headers ([!2](https://github.com/le-phare/import/pull/2)) ([e4d5da](https://github.com/le-phare/import/commit/e4d5da2873186312722c15b7e17e6bd3dc878b8f))
 ## 2.0.0 (2023-11-08)
 
 ### Features
