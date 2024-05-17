@@ -164,7 +164,7 @@ class ImportResource
 
     public function getConflictTarget(): ?string
     {
-        return $this->config['copy']['strategy_options']['conflict_target'] ?: null;
+        return $this->config['copy']['strategy_options']['conflict_target']['sql'] ?: null;
     }
 
     public function isDistinct(): bool

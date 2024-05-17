@@ -120,7 +120,7 @@ class InsertIgnoreStrategy implements StrategyInterface
 
         $sql = "INSERT INTO $tablename ($columns)
                 SELECT $tempColumns FROM $tempTablename temp $joins $whereClause
-                ON CONFLICT ($conflictTargetClause) DO NOTHING"
+                ON CONFLICT $conflictTargetClause DO NOTHING"
         ;
 
         $this->connection->beginTransaction();
