@@ -222,7 +222,7 @@ class ImportConfiguration implements ConfigurationInterface
                                             ->scalarNode('copy_condition')->defaultValue('')->end()
                                             ->booleanNode('distinct')->defaultFalse()->end()
                                             ->scalarNode('joins')->defaultValue('')->end()
-                                            ->scalarNode('conflict_target')
+                                            ->arrayNode('conflict_target')
                                                 ->beforeNormalization()
                                                     ->ifString()
                                                     ->then(function ($v) { return ['sql' => '('.$v.')']; })
