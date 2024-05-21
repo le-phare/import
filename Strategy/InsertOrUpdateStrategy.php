@@ -122,7 +122,7 @@ class InsertOrUpdateStrategy implements StrategyInterface
 
         $sql = "INSERT INTO $tablename ($columns)
                 SELECT $distinct $tempColumns FROM $tempTablename temp $joins $whereClause
-                ON CONFLICT ($conflictTargetClause) DO UPDATE SET $updateClause"
+                ON CONFLICT $conflictTargetClause DO UPDATE SET $updateClause"
         ;
 
         $this->connection->beginTransaction();
