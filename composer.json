@@ -47,10 +47,19 @@
         "php-mock/php-mock-prophecy": "^0.1.1",
         "phpoffice/phpspreadsheet": "^1.19",
         "phpspec/prophecy": "^1.10",
+        "phpspec/prophecy-phpunit": "^2.2",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.6",
         "symfony/phpunit-bridge": "^5.4|^6.0|^7.0"
+    },
+    "scripts": {
+        "analyse": "./vendor/bin/phpstan analyse --no-progress",
+        "lint": "./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --dry-run",
+        "lint:ci": "@lint:fix --using-cache=no --dry-run",
+        "lint:fix": "./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php",
+        "test:ci": "@test --colors=never --coverage-text",
+        "test": "./vendor/bin/phpunit"
     },
     "suggest": {
         "phpoffice/phpspreadsheet": "Import XLS files"
