@@ -6,4 +6,13 @@ parameters:
         - .
     excludePaths:
         - vendor
+    ignoreErrors:
+        -
+            message: '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeParentInterface::.+\(\)#'
+            paths:
+                - ImportConfiguration.php
+        -
+            message: '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::.+\(\)#'
+            paths:
+                - ImportConfiguration.php
     tmpDir: .phpstan.cache

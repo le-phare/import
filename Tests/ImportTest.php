@@ -18,7 +18,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @covers \LePhare\Import\Import
@@ -112,7 +111,7 @@ final class ImportTest extends TestCase
                         'strategy' => 'load_alphabetically',
                     ],
                 ],
-        ], ]));
+            ], ]));
 
         $this->assertFalse($this->import->execute());
     }
@@ -142,7 +141,7 @@ final class ImportTest extends TestCase
                         'strategy' => 'bad_strategy_name',
                     ],
                 ],
-        ], ]));
+            ], ]));
 
         $this->assertFalse($this->import->execute());
     }

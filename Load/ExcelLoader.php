@@ -17,7 +17,7 @@ class ExcelLoader extends CsvLoader
             return false;
         }
 
-        if (!class_exists(\PhpOffice\PhpSpreadsheet\IOFactory::class)) {
+        if (!class_exists(IOFactory::class)) {
             throw new ImportException('PhpSpreadsheet library is missing. Try "composer require phpoffice/phpspreadsheet"');
         }
 

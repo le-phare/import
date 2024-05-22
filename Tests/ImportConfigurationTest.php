@@ -134,7 +134,7 @@ class ImportConfigurationTest extends TestCase
         ];
 
         yield '“delimiter” should be evaluated' => [
-             array_merge($defaults, [
+            array_merge($defaults, [
                 'name' => $config['name'],
                 'source_dir' => str_replace('%kernel.project_dir%', '/app', $config['source_dir']),
                 'resources' => [
