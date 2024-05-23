@@ -4,10 +4,10 @@ namespace LePhare\Import\Load;
 
 use Behat\Transliterator\Transliterator;
 use Doctrine\DBAL\Connection;
+use ForceUTF8\Encoding;
 use LePhare\Import\Configuration\CredentialsInterface;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\ImportResource;
-use ForceUTF8\Encoding;
 
 /** @api */
 class CsvLoader implements LoaderInterface

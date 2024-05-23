@@ -20,7 +20,7 @@ class ImportConfiguration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder('import');
 
-        /** @var ArrayNodeDefinition */
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $treeBuilder->getRootNode();
 
         $replaceParameter = function ($string) {
