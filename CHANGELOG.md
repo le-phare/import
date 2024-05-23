@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0](https://github.com/le-phare/import/compare/v2.2.0...v2.3.0) (2024-05-23)
+
+
+### Features
+
+* **pgsql:** handle complex ON CONFLICT target expressions ([#7](https://github.com/le-phare/import/issues/7)) ([4cebf33](https://github.com/le-phare/import/commit/4cebf339fdc7962bd96a74ec8c78f00786d36b20))
+
+
+### Bug Fixes
+
+* CSV Loader crash when there is no validation of headers ([#2](https://github.com/le-phare/import/issues/2)) ([e4d5da2](https://github.com/le-phare/import/commit/e4d5da2873186312722c15b7e17e6bd3dc878b8f))
+
+
+### Miscellaneous Chores
+
+* **actions:** add release please workflow and lint ([#8](https://github.com/le-phare/import/issues/8)) ([e49ba42](https://github.com/le-phare/import/commit/e49ba421d960ac16b11bcc38deb5e40efff961d3))
+* **composer:** allow Symfony 7 ([#4](https://github.com/le-phare/import/issues/4)) ([eba6d3e](https://github.com/le-phare/import/commit/eba6d3e11ffaefe82698306dfafc748c9000db2d))
+* **master:** release 2.2.0 ([#9](https://github.com/le-phare/import/issues/9)) ([4c07a52](https://github.com/le-phare/import/commit/4c07a52c0bd79ac03a2a9d1d4c069a6e7b1e52e8))
+
 ## [2.2.0](https://github.com/le-phare/import/compare/v2.1.0...v2.2.0) (2024-05-23)
 
 
