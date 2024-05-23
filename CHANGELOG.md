@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0](https://github.com/le-phare/import/compare/v2.1.0...v2.2.0) (2024-05-23)
+
+
+### Features
+
+* **pgsql:** handle complex ON CONFLICT target expressions ([#7](https://github.com/le-phare/import/issues/7)) ([4cebf33](https://github.com/le-phare/import/commit/4cebf339fdc7962bd96a74ec8c78f00786d36b20))
+
+
+### Miscellaneous Chores
+
+* **actions:** add release please workflow and lint ([#8](https://github.com/le-phare/import/issues/8)) ([e49ba42](https://github.com/le-phare/import/commit/e49ba421d960ac16b11bcc38deb5e40efff961d3))
+
 ## 2.1.0 (2023-12-19)
 
 ### Features
@@ -24,4 +36,3 @@ All notable changes to this project will be documented in this file.
 ### Features
 
 * **import:** first version
-

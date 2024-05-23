@@ -1,7 +1,13 @@
 {
     "name": "lephare/import",
     "description": "Import CSV/XLS files",
-    "keywords": ["import", "csv", "xls", "excel", "database"],
+    "keywords": [
+        "import",
+        "csv",
+        "xls",
+        "excel",
+        "database"
+    ],
     "type": "library",
     "license": "MIT",
     "authors": [
