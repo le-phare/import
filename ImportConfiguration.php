@@ -231,6 +231,8 @@ class ImportConfiguration implements ConfigurationInterface
                                                     ->scalarNode('sql')->defaultValue('')->end()
                                                 ->end()
                                             ->end()
+                                            ->scalarNode('update_load_indentifier')->defaultValue('')->end()
+                                            ->scalarNode('update_copy_indentifier')->defaultValue('')->end()
                                             ->variableNode('non_updateable_fields')
                                                 ->defaultValue([])
                                             ->end()
