@@ -3,6 +3,8 @@
 namespace LePhare\Import\Strategy;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\ImportResource;
 
@@ -22,6 +24,26 @@ class UpdateStrategy implements StrategyInterface
 
     public function copy(ImportResource $resource): int
     {
+        $platform = $this->connection->getDatabasePlatform();
+
+        if ($platform instanceof MySQLPlatform) {
+            $rowCount = $this->mysqlCopy($resource);
+        } elseif ($platform instanceof PostgreSQLPlatform) {
+            $rowCount = $this->postgresqlCopy($resource);
+        } else {
+            throw new ImportException('update strategy is not implemented for '.get_class($platform));
+        }
+
+        return $rowCount;
+    }
+
+    public function mysqlCopy(ImportResource $resource): int
+    {
+        return 0;
+    }
+
+    public function postgresqlCopy(ImportResource $resource): int
+    {
         $tablename = $this->connection->quoteIdentifier($resource->getTargetTablename());
         $tempTablename = $this->connection->quoteIdentifier($resource->getTablename());
 
@@ -39,22 +61,29 @@ class UpdateStrategy implements StrategyInterface
                 $tempColumn = $properties['sql'] ?: $this->connection->quoteIdentifier($name);
 
                 if ($column && $tempColumn) {
-                    $setters[] = "
-                    $column = (SELECT $tempColumn FROM $tempTablename
-                    WHERE $tempTablename.$tempIdentifier = $tablename.$destinationIdentifier)";
+                    if ('NULL' !== strtoupper($tempColumn)) {
+                        $setters[] = "
+                            $column = (SELECT $tempColumn FROM $tempTablename
+                            WHERE $tempTablename.$tempIdentifier = $tablename.$destinationIdentifier)";
+                    } else {
+                        $setters[] = "
+                            $column = NULL";
+                    }
                 }
             }
         }
 
         $setters = implode(',', $setters);
 
-        $whereClause = 'WHERE '.$destinationIdentifier.' IN (SELECT '.$tempIdentifier.' FROM '.$tempTablename.')';
+        $joins = $resource->getJoins();
+        $whereClause = 'WHERE '.$tablename.'.'.$destinationIdentifier.' IN (SELECT '.$tempIdentifier.' FROM '.$tempTablename.')';
         if ($resource->getCopyCondition()) {
             $whereClause .= ' AND '.$resource->getCopyCondition();
         }
 
         $sql = "UPDATE $tablename
                 SET $setters
+                FROM $tempTablename temp $joins
                 $whereClause";
 
         $this->connection->beginTransaction();
