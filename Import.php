@@ -21,12 +21,14 @@ use Psr\Log\NullLogger;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class Import implements ImportInterface
 {
     protected ConfigurationInterface $configuration;
     protected Connection $connection;
     protected EventDispatcherInterface $dispatcher;
+    protected TranslatorInterface $translator;
     protected LoggerInterface $logger;
     protected Collection $config;
     protected StrategyRepositoryInterface $strategyRepository;
@@ -41,6 +43,7 @@ class Import implements ImportInterface
         StrategyRepositoryInterface $strategyRepository,
         LoadStrategyRepositoryInterface $loadStrategyRepository,
         ConfigurationInterface $configuration,
+        TranslatorInterface $translator,
         ?LoggerInterface $logger = null
     ) {
         $this->configuration = $configuration;
@@ -48,6 +51,7 @@ class Import implements ImportInterface
         $this->dispatcher = $dispatcher;
         $this->strategyRepository = $strategyRepository;
         $this->loadStrategyRepository = $loadStrategyRepository;
+        $this->translator = $translator;
         $this->logger = $logger ?? new NullLogger();
         $this->loaders = new ArrayCollection();
     }
@@ -199,10 +203,10 @@ class Import implements ImportInterface
             }
 
             if (($count = $this->loadData($resource, $file)) !== 0) {
-                $this->logger->notice('{file}: {count} lines loaded', [
-                    'file' => $file->getBasename(),
-                    'count' => $count, ]
-                );
+                $this->logger->notice($this->translator->trans('{file}: {count} lines loaded', [
+                    '{file}' => $file->getBasename(),
+                    '{count}' => $count,
+                ]));
                 $loaded = true;
             }
         }
