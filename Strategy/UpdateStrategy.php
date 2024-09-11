@@ -46,7 +46,7 @@ class UpdateStrategy implements StrategyInterface
         $destinationIdentifier = $resource->getCopyIdentifier();
 
         if (null === $tempIdentifier || null === $destinationIdentifier) {
-            throw new ImportException(sprintf('Options update_load_indentifier and update_copy_indentifier are mandatory for %s strategy', $this->getName()));
+            throw new ImportException(sprintf('Options update_load_identifier and update_copy_identifier are mandatory for %s strategy', $this->getName()));
         }
 
         $setters = [];
@@ -104,7 +104,7 @@ class UpdateStrategy implements StrategyInterface
         $destinationIdentifier = $resource->getCopyIdentifier();
 
         if (null === $tempIdentifier || null === $destinationIdentifier) {
-            throw new ImportException(sprintf('Options update_load_indentifier and update_copy_indentifier are mandatory for %s strategy', $this->getName()));
+            throw new ImportException(sprintf('Options update_load_identifier and update_copy_identifier are mandatory for %s strategy', $this->getName()));
         }
 
         $setters = [];

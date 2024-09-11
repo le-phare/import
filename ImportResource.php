@@ -174,12 +174,12 @@ class ImportResource
 
     public function getLoadIdentifier(): ?string
     {
-        return $this->config['copy']['strategy_options']['update_load_indentifier'] ?: null;
+        return $this->config['copy']['strategy_options']['update_load_identifier'] ?: null;
     }
 
     public function getCopyIdentifier(): ?string
     {
-        return $this->config['copy']['strategy_options']['update_copy_indentifier'] ?: null;
+        return $this->config['copy']['strategy_options']['update_copy_identifier'] ?: null;
     }
 
     public function getTargetTablename(): string
