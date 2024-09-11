@@ -172,6 +172,16 @@ class ImportResource
         return $this->config['copy']['strategy_options']['distinct'];
     }
 
+    public function getLoadIdentifier(): ?string
+    {
+        return $this->config['copy']['strategy_options']['update_load_identifier'] ?: null;
+    }
+
+    public function getCopyIdentifier(): ?string
+    {
+        return $this->config['copy']['strategy_options']['update_copy_identifier'] ?: null;
+    }
+
     public function getTargetTablename(): string
     {
         return $this->config['copy']['target'];
