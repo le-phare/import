@@ -61,17 +61,16 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
 
             foreach ($archivableFiles as $archivableFile) {
                 $sourceDir = basename(dirname($archivableFile->getRealPath()));
-                $archiveDest = "$archiveDirectory/$sourceDir/".$archivableFile->getBasename();
+                $archiveDest = "{$archiveDirectory}/{$sourceDir}/".$archivableFile->getBasename();
 
-                if (!is_dir("$archiveDirectory/$sourceDir/")) {
-                    mkdir("$archiveDirectory/$sourceDir/", 0777, true);
+                if (!is_dir("{$archiveDirectory}/{$sourceDir}/")) {
+                    mkdir("{$archiveDirectory}/{$sourceDir}/", 0777, true);
                 }
 
                 if (!rename($archivableFile->getRealPath(), $archiveDest)) {
                     throw new \RuntimeException(sprintf('Unable to archive file %s', $archivableFile->getRealPath()));
-                } else {
-                    $logger->debug(sprintf('File %s successfully archived', $archivableFile->getBasename()));
                 }
+                $logger->debug(sprintf('File %s successfully archived', $archivableFile->getBasename()));
 
                 ++$archived;
             }
@@ -101,17 +100,16 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
 
             foreach ($quarantinableFiles as $quarantinableFile) {
                 $sourceDir = basename(dirname($quarantinableFile->getRealPath()));
-                $quarantineDest = "$quarantineDirectory/$sourceDir/".$quarantinableFile->getBasename();
+                $quarantineDest = "{$quarantineDirectory}/{$sourceDir}/".$quarantinableFile->getBasename();
 
-                if (!is_dir("$quarantineDirectory/$sourceDir/")) {
-                    mkdir("$quarantineDirectory/$sourceDir/", 0777, true);
+                if (!is_dir("{$quarantineDirectory}/{$sourceDir}/")) {
+                    mkdir("{$quarantineDirectory}/{$sourceDir}/", 0777, true);
                 }
 
                 if (!rename($quarantinableFile->getRealPath(), $quarantineDest)) {
                     throw new \RuntimeException(sprintf('Unable to quarantine file %s', $quarantinableFile->getRealPath()));
-                } else {
-                    $logger->warning(sprintf('Extra file found. Put %s into quarantine.', $quarantinableFile->getBasename()));
                 }
+                $logger->warning(sprintf('Extra file found. Put %s into quarantine.', $quarantinableFile->getBasename()));
 
                 ++$quarantined;
             }
@@ -154,7 +152,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
         $files = array_diff(scandir($dir), ['.', '..']);
 
         foreach ($files as $file) {
-            (is_dir("$dir/$file")) ? $this->removeDir("$dir/$file") : unlink("$dir/$file");
+            (is_dir("{$dir}/{$file}")) ? $this->removeDir("{$dir}/{$file}") : unlink("{$dir}/{$file}");
         }
 
         return rmdir($dir);

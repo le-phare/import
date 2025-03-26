@@ -15,7 +15,6 @@ class StrategyRepository implements StrategyRepositoryInterface
 
     public function getStrategy(string $name): ?StrategyInterface
     {
-        return $this->strategies[$name] ?? null
-        ;
+        return $this->strategies[$name] ?? null;
     }
 }

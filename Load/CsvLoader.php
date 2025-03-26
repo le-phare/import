@@ -75,17 +75,17 @@ class CsvLoader implements LoaderInterface
             }
 
             $sql = <<<SQL
-            LOAD DATA LOCAL INFILE $from IGNORE
-            INTO TABLE $tablename
+            LOAD DATA LOCAL INFILE {$from} IGNORE
+            INTO TABLE {$tablename}
             FIELDS
-                TERMINATED BY $quotedFieldDelimiter
-                OPTIONALLY ENCLOSED BY $quoteCharacter
-                ESCAPED BY $escapeCharacter
+                TERMINATED BY {$quotedFieldDelimiter}
+                OPTIONALLY ENCLOSED BY {$quoteCharacter}
+                ESCAPED BY {$escapeCharacter}
             LINES
-                TERMINATED BY $lineDelimiter
-            $header
-            ($fields)
-            SET file_line_no = CONCAT($from,':',@row:=@row+1)
+                TERMINATED BY {$lineDelimiter}
+            {$header}
+            ({$fields})
+            SET file_line_no = CONCAT({$from},':',@row:=@row+1)
             SQL;
 
             $conn->query('set @row = 1');
@@ -93,7 +93,7 @@ class CsvLoader implements LoaderInterface
                 throw new ImportException($conn->error);
             }
 
-            $rowCountSql = "SELECT COUNT(*) FROM $tablename";
+            $rowCountSql = "SELECT COUNT(*) FROM {$tablename}";
             $rowCountStmt = $conn->query($rowCountSql);
             $rowCount = (int) $rowCountStmt->fetch_array()[0];
 
@@ -125,15 +125,15 @@ class CsvLoader implements LoaderInterface
             }
 
             $sql = <<<SQL
-                COPY $tablename ($fields)
+                COPY {$tablename} ({$fields})
                 FROM STDIN
                 WITH (
                     FORMAT csv,
-                    QUOTE $quoteCharacter,
-                    DELIMITER $quotedFieldDelimiter,
-                    ESCAPE $escapeCharacter,
-                    $header
-                    NULL $nullString
+                    QUOTE {$quoteCharacter},
+                    DELIMITER {$quotedFieldDelimiter},
+                    ESCAPE {$escapeCharacter},
+                    {$header}
+                    NULL {$nullString}
                 )
             SQL;
             pg_query($pg, $sql);
