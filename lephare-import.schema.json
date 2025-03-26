@@ -6,7 +6,7 @@
         "name": {
             "type": "string",
             "minLength": 1,
-            "description": "Nom de l'import"
+            "description": "Name of the import"
         },
         "label": {
             "type": ["string", "null"],
@@ -14,51 +14,51 @@
         },
         "log_dir": {
             "type": ["string", "null"],
-            "description": "Chemin vers le dossier où stocker les logs",
+            "description": "Path to the folder where logs are stored",
             "examples": ["%kernel.project_dir%/var/log/import"]
         },
         "source_dir": {
             "type": "string",
             "minLength": 1,
-            "description": "Chemin vers le dossier contenant les fichiers à importer"
+            "description": "Path to the folder containing the files to import."
         },
         "archive": {
             "type": "object",
-            "description": "Options d'archivage",
+            "description": "Archiving options",
             "properties": {
                 "dir": {
                     "type": ["string", "null"],
                     "minLength": 1,
-                    "description": "Chemin vers le dossier où stocker les fichiers d'import en cas de mise en quarantaine",
+                    "description": "Path to the folder where import files should be stored in case of quarantine",
                     "examples": ["var/exchange/input/archives/faq"]
                 },
                 "enabled": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Activer/désactiver l'archivage"
+                    "description": "Enable/Disable Archiving"
                 },
                 "rotation": {
                     "type": "integer",
                     "default": 30,
-                    "description": "Nombre de dossiers d'archivage à conserver"
+                    "description": "Number of archival files to keep."
                 }
             },
             "additionalProperties": false
         },
         "quarantine": {
             "type": "object",
-            "description": "Options de mise en quarantine",
+            "description": "Quarantine options",
             "properties": {
                 "dir": {
                     "type": ["string", "null"],
                     "minLength": 1,
-                    "description": "Chemin vers le dossier où stocker les fichiers d'import en cas de mise en quarantaine",
+                    "description": "Path to the folder where import files should be stored in case of quarantine",
                     "examples": ["var/exchange/input/quarantine/faq"]
                 },
                 "enabled": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Activer/désactiver la quarantaine"
+                    "description": "Enable/Disable Quarantine"
                 },
                 "rotation": {
                     "type": "integer",
@@ -69,12 +69,12 @@
         },
         "email_report": {
             "type": "object",
-            "description": "Options d'envoi d'email",
+            "description": "Email sending options",
             "properties": {
                 "email_from": {
                     "type": "string",
                     "minLength": 1,
-                    "description": "Email de l'expéditeur"
+                    "description": "Sender's Email"
                 },
                 "recipients": {
                     "type": "array",
@@ -82,23 +82,23 @@
                         "type": "string"
                     },
                     "default": [],
-                    "description": "Email(s) du/des destinataire(s)"
+                    "description": "Recipient(s)' Email(s)"
                 },
                 "subject_pattern": {
                     "type": "string",
                     "default": "[%status%] Import report : %name%",
-                    "description": "Objet du mail"
+                    "description": "Subject of the email"
                 },
                 "email_template": {
                     "type": ["string", "null"],
-                    "description": "Chemin vers un fichier Twig de modèle d'email"
+                    "description": "Path to a Twig email template file"
                 }
             },
             "additionalProperties": false
         },
         "resources": {
             "type": "object",
-            "description": "Liste de ressources",
+            "description": "List of resources",
             "patternProperties": {
                 "^[a-zA-Z0-9_]+$": {
                     "type": "object",
@@ -106,11 +106,11 @@
                         "tablename": {
                             "type": "string",
                             "minLength": 1,
-                            "description": "Nom de la table temporaire créée pour l'import"
+                            "description": "Name of the temporary table created for import"
                         },
                         "load": {
                             "type": "object",
-                            "description": "Décrit comment charger les données dans la table temporaire",
+                            "description": "Describes how to load data into the temporary table",
                             "properties": {
                                 "pattern": {
                                     "type": "string",
@@ -222,7 +222,7 @@
                         },
                         "copy": {
                             "type": "object",
-                            "description": "Décrit comment copier les données de la table temporaire vers la table cible",
+                            "description": "Describes how to copy data from the temporary table to the target table",
                             "properties": {
                                 "target": {
                                     "type": "string",
