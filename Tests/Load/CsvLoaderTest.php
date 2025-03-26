@@ -41,7 +41,7 @@ class CsvLoaderTest extends TestCase
             2,Bob,40
             3,Charlie,50
 
-            CSV
+            CSV,
         ];
 
         yield 'id, age, name' => [
@@ -52,7 +52,7 @@ class CsvLoaderTest extends TestCase
             2,40,Bob
             3,50,Charlie
 
-            CSV
+            CSV,
         ];
 
         yield 'id, name' => [
@@ -63,7 +63,7 @@ class CsvLoaderTest extends TestCase
             2,Bob
             3,Charlie
 
-            CSV
+            CSV,
         ];
 
         yield 'id, name, name' => [
@@ -74,7 +74,7 @@ class CsvLoaderTest extends TestCase
             2,Bob,Bar
             3,Charlie,FooBar
 
-            CSV
+            CSV,
         ];
 
         yield 'id, name, age, name' => [
@@ -85,7 +85,7 @@ class CsvLoaderTest extends TestCase
             2,Bob,40,Bar
             3,Charlie,50,FooBar
 
-            CSV
+            CSV,
         ];
     }
 
