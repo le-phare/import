@@ -7,16 +7,18 @@ $finder = PhpCsFixer\Finder::create()
 
 return (new PhpCsFixer\Config())
     ->setRules([
+        // '@PhpCsFixer' => true,
         '@Symfony' => true,
-        '@DoctrineAnnotation' => true,
-        'no_unused_imports' => true,
-        'array_syntax' => [
-            'syntax' => 'short',
-        ],
-        'ordered_imports' => [
-            'sort_algorithm' => 'alpha',
-        ],
+        'trailing_comma_in_multiline' => [
+            'after_heredoc' => true,
+            'elements' => [
+                'array_destructuring',
+                'arrays',
+                // 'match', // PHP 8.0+
+                // 'parameters' // PHP 8.0+
+            ]
+        ]
     ])
     ->setFinder($finder)
-    ->setCacheFile('.php-cs-fixer.cache') // forward compatibility with 3.x line
+    ->setCacheFile('.php-cs-fixer.cache')
 ;
