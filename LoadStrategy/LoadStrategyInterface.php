@@ -8,6 +8,6 @@ interface LoadStrategyInterface
 
     /**
      * @param \SplFileInfo[] $resources
-     **/
+     */
     public function sort(array &$resources): void;
 }

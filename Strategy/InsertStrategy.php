@@ -48,13 +48,12 @@ class InsertStrategy implements StrategyInterface
         $updateClause = implode(',', $updateClause);
 
         $whereClause = null !== $resource->getCopyCondition() ?
-            'WHERE '.$resource->getCopyCondition() : ''
-        ;
+            'WHERE '.$resource->getCopyCondition() : '';
 
         $joins = $resource->getJoins();
 
-        $sql = "INSERT INTO $tablename ($columns)
-                SELECT $tempColumns FROM $tempTablename temp $joins $whereClause";
+        $sql = "INSERT INTO {$tablename} ({$columns})
+                SELECT {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}";
 
         $this->connection->beginTransaction();
 

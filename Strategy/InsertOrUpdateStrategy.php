@@ -70,10 +70,9 @@ class InsertOrUpdateStrategy implements StrategyInterface
         $joins = $resource->getJoins();
         $distinct = $resource->isDistinct() ? 'DISTINCT' : '';
 
-        $sql = "INSERT INTO $tablename ($columns)
-                SELECT $distinct $tempColumns FROM $tempTablename temp $joins $whereClause
-                ON DUPLICATE KEY UPDATE $updateClause"
-        ;
+        $sql = "INSERT INTO {$tablename} ({$columns})
+                SELECT {$distinct} {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}
+                ON DUPLICATE KEY UPDATE {$updateClause}";
 
         $this->connection->beginTransaction();
         $this->connection->executeQuery($sql);
@@ -81,7 +80,7 @@ class InsertOrUpdateStrategy implements StrategyInterface
 
         // Because of bad results of PDOStatement::rowCount() for MySQL (at least)
         // we determine rowCount from select clause that has been inserted
-        $rowCountSql = "SELECT COUNT(*) FROM $tempTablename temp $whereClause";
+        $rowCountSql = "SELECT COUNT(*) FROM {$tempTablename} temp {$whereClause}";
         $rowCountStmt = $this->connection->executeQuery($rowCountSql);
 
         return (int) $rowCountStmt->fetchOne();
@@ -120,10 +119,9 @@ class InsertOrUpdateStrategy implements StrategyInterface
         $conflictTargetClause = $resource->getConflictTarget() ?: '';
         $distinct = $resource->isDistinct() ? 'DISTINCT' : '';
 
-        $sql = "INSERT INTO $tablename ($columns)
-                SELECT $distinct $tempColumns FROM $tempTablename temp $joins $whereClause
-                ON CONFLICT $conflictTargetClause DO UPDATE SET $updateClause"
-        ;
+        $sql = "INSERT INTO {$tablename} ({$columns})
+                SELECT {$distinct} {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}
+                ON CONFLICT {$conflictTargetClause} DO UPDATE SET {$updateClause}";
 
         $this->connection->beginTransaction();
 

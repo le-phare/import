@@ -15,8 +15,7 @@ class LoadStrategyRepository implements LoadStrategyRepositoryInterface
 
     public function getLoadStrategy(string $name): ?LoadStrategyInterface
     {
-        return $this->strategies[$name] ?? null
-        ;
+        return $this->strategies[$name] ?? null;
     }
 
     public function getLoadStrategies(): array

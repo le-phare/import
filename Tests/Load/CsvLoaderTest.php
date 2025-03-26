@@ -17,6 +17,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 
 /**
  * @covers \LePhare\Import\Load\CsvLoader
+ *
+ * @internal
  */
 class CsvLoaderTest extends TestCase
 {
@@ -30,64 +32,6 @@ class CsvLoaderTest extends TestCase
     private Credentials $credentials;
     private ImportResource $resource;
     private PHPProphet $phpmockProphet;
-
-    public function dataProvider(): iterable
-    {
-        yield 'id, name, age' => [
-            'expectImportException' => false,
-            'data' => <<<CSV
-            id,name,age
-            1,Alice,30
-            2,Bob,40
-            3,Charlie,50
-
-            CSV
-        ];
-
-        yield 'id, age, name' => [
-            'expectImportException' => false,
-            'data' => <<<CSV
-            id,age,name
-            1,30,Alice
-            2,40,Bob
-            3,50,Charlie
-
-            CSV
-        ];
-
-        yield 'id, name' => [
-            'expectImportException' => true,
-            'data' => <<<CSV
-            id,name
-            1,Alice
-            2,Bob
-            3,Charlie
-
-            CSV
-        ];
-
-        yield 'id, name, name' => [
-            'expectImportException' => true,
-            'data' => <<<CSV
-            id,name,name
-            1,Alice,Foo
-            2,Bob,Bar
-            3,Charlie,FooBar
-
-            CSV
-        ];
-
-        yield 'id, name, age, name' => [
-            'expectImportException' => true,
-            'data' => <<<CSV
-            id,name,age,name
-            1,Alice,30,Foo
-            2,Bob,40,Bar
-            3,Charlie,50,FooBar
-
-            CSV
-        ];
-    }
 
     /**
      * @dataProvider dataProvider
@@ -136,13 +80,13 @@ class CsvLoaderTest extends TestCase
             $joinedFields = implode(',', array_map(fn ($field): string => '"'.$field.'"', $fields));
 
             $sql = <<<SQL
-                COPY "import"."users" ($joinedFields)
+                COPY "import"."users" ({$joinedFields})
                 FROM STDIN
                 WITH (
                     FORMAT csv,
                     QUOTE '"',
                     DELIMITER ',',
-                    ESCAPE '\',
+                    ESCAPE '\\',
                     HEADER,
                     NULL ''
                 )
@@ -198,23 +142,23 @@ class CsvLoaderTest extends TestCase
             $tablename = '`import`.`users`';
 
             $sql = <<<SQL
-            LOAD DATA LOCAL INFILE $from IGNORE
-            INTO TABLE $tablename
+            LOAD DATA LOCAL INFILE {$from} IGNORE
+            INTO TABLE {$tablename}
             FIELDS
                 TERMINATED BY ','
                 OPTIONALLY ENCLOSED BY '"'
-                ESCAPED BY '\\\'
+                ESCAPED BY '\\\\'
             LINES
                 TERMINATED BY '\\\\n'
             IGNORE 1 LINES
-            ($joinedFields)
-            SET file_line_no = CONCAT($from,':',@row:=@row+1)
+            ({$joinedFields})
+            SET file_line_no = CONCAT({$from},':',@row:=@row+1)
             SQL;
 
             $mysqli->query($sql)->shouldBeCalledOnce()->willReturn(true);
             $mysqliResult = $this->prophesize(\mysqli_result::class);
             $mysqliResult->fetch_array()->willReturn([3]);
-            $mysqli->query("SELECT COUNT(*) FROM $tablename")->shouldBeCalledOnce()->willReturn($mysqliResult->reveal());
+            $mysqli->query("SELECT COUNT(*) FROM {$tablename}")->shouldBeCalledOnce()->willReturn($mysqliResult->reveal());
 
             $this->connection->getDatabasePlatform()->willReturn($platform);
             $this->connection->quote($filename)->willReturn($platform->quoteStringLiteral($filename));
@@ -239,6 +183,64 @@ class CsvLoaderTest extends TestCase
         ]);
 
         $this->assertEquals(count($data) - 1, $loadedResourcesCount);
+    }
+
+    public function dataProvider(): iterable
+    {
+        yield 'id, name, age' => [
+            'expectImportException' => false,
+            'data' => <<<'CSV'
+            id,name,age
+            1,Alice,30
+            2,Bob,40
+            3,Charlie,50
+
+            CSV,
+        ];
+
+        yield 'id, age, name' => [
+            'expectImportException' => false,
+            'data' => <<<'CSV'
+            id,age,name
+            1,30,Alice
+            2,40,Bob
+            3,50,Charlie
+
+            CSV,
+        ];
+
+        yield 'id, name' => [
+            'expectImportException' => true,
+            'data' => <<<'CSV'
+            id,name
+            1,Alice
+            2,Bob
+            3,Charlie
+
+            CSV,
+        ];
+
+        yield 'id, name, name' => [
+            'expectImportException' => true,
+            'data' => <<<'CSV'
+            id,name,name
+            1,Alice,Foo
+            2,Bob,Bar
+            3,Charlie,FooBar
+
+            CSV,
+        ];
+
+        yield 'id, name, age, name' => [
+            'expectImportException' => true,
+            'data' => <<<'CSV'
+            id,name,age,name
+            1,Alice,30,Foo
+            2,Bob,40,Bar
+            3,Charlie,50,FooBar
+
+            CSV,
+        ];
     }
 
     protected function setUp(): void
