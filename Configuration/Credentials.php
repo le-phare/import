@@ -18,7 +18,7 @@ final class Credentials implements CredentialsInterface
         string $host,
         ?int $port,
         string $username,
-        string $password,
+        string $password
     ) {
         $this->host = $host;
         $this->port = $port;

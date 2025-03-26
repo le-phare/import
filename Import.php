@@ -41,7 +41,7 @@ class Import implements ImportInterface
         StrategyRepositoryInterface $strategyRepository,
         LoadStrategyRepositoryInterface $loadStrategyRepository,
         ConfigurationInterface $configuration,
-        ?LoggerInterface $logger = null,
+        ?LoggerInterface $logger = null
     ) {
         $this->configuration = $configuration;
         $this->connection = $connection;
