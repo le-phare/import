@@ -7,7 +7,7 @@ $finder = PhpCsFixer\Finder::create()
 
 return (new PhpCsFixer\Config())
     ->setRules([
-        // '@PhpCsFixer' => true,
+        '@PhpCsFixer' => true,
         '@Symfony' => true,
         'trailing_comma_in_multiline' => [
             'after_heredoc' => true,

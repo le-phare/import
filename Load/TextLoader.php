@@ -65,7 +65,7 @@ class TextLoader implements LoaderInterface
             pg_query($pg, "SET datestyle = 'ISO, DMY'");
 
             $sql = "
-                COPY $tablename ($fields)
+                COPY {$tablename} ({$fields})
                 FROM STDIN
                 WITH (
                     FORMAT text

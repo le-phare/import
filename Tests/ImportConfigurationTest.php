@@ -9,7 +9,11 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 
-/** @covers \LePhare\Import\ImportConfiguration */
+/**
+ * @covers \LePhare\Import\ImportConfiguration
+ *
+ * @internal
+ */
 class ImportConfigurationTest extends TestCase
 {
     private function createConfiguration(array $parameters = []): ImportConfiguration

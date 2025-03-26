@@ -234,7 +234,7 @@ class Import implements ImportInterface
             if (null !== $strategy) {
                 try {
                     $lines = $strategy->copy($resource);
-                    $this->logger->notice("$name: $lines lines copied");
+                    $this->logger->notice("{$name}: {$lines} lines copied");
                 } catch (\Exception $e) {
                     if (!$e instanceof ImportException) {
                         $this->logger->error('{name}: {message}', [
@@ -273,7 +273,7 @@ class Import implements ImportInterface
 
         if ($platform->supportsSchemas() && false !== strpos($resource->getTablename(), '.')) {
             [$schema, $table] = explode('.', $resource->getTablename());
-            $connection->executeQuery("CREATE SCHEMA IF NOT EXISTS $schema");
+            $connection->executeQuery("CREATE SCHEMA IF NOT EXISTS {$schema}");
         }
 
         try {

@@ -148,8 +148,7 @@ class ImportResource
     public function isUpdateableField($field): bool
     {
         return !isset($this->config['copy']['strategy_options'])
-            || !in_array($field, $this->config['copy']['strategy_options']['non_updateable_fields'])
-        ;
+            || !in_array($field, $this->config['copy']['strategy_options']['non_updateable_fields']);
     }
 
     public function getCopyCondition(): ?string

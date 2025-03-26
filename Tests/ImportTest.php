@@ -23,6 +23,8 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
  * @covers \LePhare\Import\Import
  *
  * @uses \LePhare\Import\ImportConfiguration
+ *
+ * @internal
  */
 final class ImportTest extends TestCase
 {
@@ -88,7 +90,8 @@ final class ImportTest extends TestCase
         $this->connection
             ->getDatabasePlatform()
             ->shouldBeCalled()
-            ->willThrow(new \ErrorException('simulate error exception'));
+            ->willThrow(new \ErrorException('simulate error exception'))
+        ;
 
         $this->expectException(ExceptionInterface::class);
         $this->expectExceptionMessage('simulate error exception');
