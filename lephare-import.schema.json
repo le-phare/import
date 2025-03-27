@@ -183,7 +183,7 @@
                                 "fields": {
                                     "type": "object",
                                     "patternProperties": {
-                                        "^[a-zA-Z_]+$": {
+                                        "^.+$": {
                                             "anyOf": [
                                                 {
                                                     "type": "integer"
@@ -228,7 +228,8 @@
                                                                 }
                                                             }
                                                         }
-                                                    }
+                                                    },
+                                                    "additionalProperties": false
                                                 }
                                             ]
                                         }
@@ -236,10 +237,60 @@
                                     "additionalProperties": false
                                 },
                                 "extra_fields": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object"
-                                    }
+                                    "type": "object",
+                                    "patternProperties": {
+                                        "^.+$": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "integer"
+                                                },
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "type": {
+                                                            "type": "string"
+                                                        },
+                                                        "options": {
+                                                            "type": "object",
+                                                            "patternProperties": {
+                                                                "^[a-zA-Z_]+$": {
+                                                                    "anyOf": [
+                                                                        {
+                                                                            "type": "integer"
+                                                                        },
+                                                                        {
+                                                                            "type": "null"
+                                                                        },
+                                                                        {
+                                                                            "type": "string"
+                                                                        },
+                                                                        {
+                                                                            "type": "boolean"
+                                                                        }
+                                                                    ]
+                                                                }
+                                                            }
+                                                        }
+                                                    },
+                                                    "additionalProperties": false
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "additionalProperties": false
                                 },
                                 "indexes": {
                                     "type": "array",
