@@ -1,0 +1,323 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "https://lephare.com/lephare/import.schema.json",
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Name of the import"
+        },
+        "label": {
+            "type": ["string", "null"],
+            "description": "useless"
+        },
+        "log_dir": {
+            "type": ["string", "null"],
+            "description": "Path to the folder where logs are stored",
+            "examples": ["%kernel.project_dir%/var/log/import"]
+        },
+        "source_dir": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path to the folder containing the files to import."
+        },
+        "archive": {
+            "type": "object",
+            "description": "Archiving options",
+            "properties": {
+                "dir": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "description": "Path to the folder where import files should be stored in case of quarantine",
+                    "examples": ["var/exchange/input/archives/faq"]
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable/Disable Archiving"
+                },
+                "rotation": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Number of archival files to keep."
+                }
+            },
+            "additionalProperties": false
+        },
+        "quarantine": {
+            "type": "object",
+            "description": "Quarantine options",
+            "properties": {
+                "dir": {
+                    "type": ["string", "null"],
+                    "minLength": 1,
+                    "description": "Path to the folder where import files should be stored in case of quarantine",
+                    "examples": ["var/exchange/input/quarantine/faq"]
+                },
+                "enabled": {
+                    "type": "boolean",
+                    "default": true,
+                    "description": "Enable/Disable Quarantine"
+                },
+                "rotation": {
+                    "type": "integer",
+                    "default": 30
+                }
+            },
+            "additionalProperties": false
+        },
+        "email_report": {
+            "type": "object",
+            "description": "Email sending options",
+            "properties": {
+                "email_from": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "Sender's Email"
+                },
+                "recipients": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [],
+                    "description": "Recipient(s)' Email(s)"
+                },
+                "subject_pattern": {
+                    "type": "string",
+                    "default": "[%status%] Import report : %name%",
+                    "description": "Subject of the email"
+                },
+                "email_template": {
+                    "type": ["string", "null"],
+                    "description": "Path to a Twig email template file"
+                }
+            },
+            "additionalProperties": false
+        },
+        "resources": {
+            "type": "object",
+            "description": "List of resources",
+            "patternProperties": {
+                "^[a-zA-Z0-9_]+$": {
+                    "type": "object",
+                    "properties": {
+                        "tablename": {
+                            "type": "string",
+                            "minLength": 1,
+                            "description": "Name of the temporary table created for import"
+                        },
+                        "load": {
+                            "type": "object",
+                            "description": "Describes how to load data into the temporary table",
+                            "properties": {
+                                "pattern": {
+                                    "type": "string",
+                                    "minLength": 1
+                                },
+                                "add_file_line_number": {
+                                    "type": "boolean",
+                                    "default": true
+                                },
+                                "format": {
+                                    "type": "string",
+                                    "default": "csv",
+                                    "minLength": 1
+                                },
+                                "format_options": {
+                                    "type": "object",
+                                    "properties": {
+                                        "with_header": {
+                                            "type": "boolean",
+                                            "default": true
+                                        },
+                                        "validate_headers": {
+                                            "type": "boolean",
+                                            "default": true
+                                        },
+                                        "sheet_index": {
+                                            "type": "integer",
+                                            "default": 0
+                                        },
+                                        "null_string": {
+                                            "type": "string",
+                                            "default": ""
+                                        },
+                                        "field_delimiter": {
+                                            "type": "string",
+                                            "default": ";",
+                                            "minLength": 1
+                                        },
+                                        "quote_character": {
+                                            "type": "string",
+                                            "default": "\"",
+                                            "minLength": 1
+                                        },
+                                        "line_delimiter": {
+                                            "type": "string",
+                                            "default": "\n",
+                                            "minLength": 1
+                                        },
+                                        "escape_character": {
+                                            "type": "string",
+                                            "default": "\\",
+                                            "minLength": 1
+                                        },
+                                        "pgsql_format": {
+                                            "type": "string",
+                                            "default": "csv"
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "loop": {
+                                    "type": "boolean",
+                                    "default": false
+                                },
+                                "strategy": {
+                                    "type": "string",
+                                    "default": "load_alphabetically",
+                                    "minLength": 1
+                                },
+                                "fields": {
+                                    "type": "object",
+                                    "patternProperties": {
+                                        "^[a-zA-Z_]+$": {
+                                            "anyOf": [
+                                                {
+                                                    "type": "integer"
+                                                },
+                                                {
+                                                    "type": "null"
+                                                },
+                                                {
+                                                    "type": "string"
+                                                },
+                                                {
+                                                    "type": "boolean"
+                                                },
+                                                {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            ]
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "extra_fields": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    }
+                                },
+                                "indexes": {
+                                    "type": "array",
+                                    "items": {},
+                                    "default": []
+                                }
+                            },
+                            "additionalProperties": false
+                        },
+                        "copy": {
+                            "type": "object",
+                            "description": "Describes how to copy data from the temporary table to the target table",
+                            "properties": {
+                                "target": {
+                                    "type": "string",
+                                    "minLength": 1
+                                },
+                                "strategy": {
+                                    "type": "string",
+                                    "default": "insert_or_update",
+                                    "minLength": 1
+                                },
+                                "strategy_options": {
+                                    "type": "object",
+                                    "properties": {
+                                        "copy_condition": {
+                                            "type": "string"
+                                        },
+                                        "distinct": {
+                                            "type": "boolean",
+                                            "default": false
+                                        },
+                                        "joins": {
+                                            "type": "string"
+                                        },
+                                        "conflict_target": {
+                                            "oneOf": [
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "sql": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                {
+                                                    "type": "string"
+                                                }
+                                            ],
+                                            "additionalProperties": false
+                                        },
+                                        "non_updateable_fields": {
+                                            "type": "array",
+                                            "items": {},
+                                            "default": []
+                                        }
+                                    },
+                                    "additionalProperties": false
+                                },
+                                "mapping": {
+                                    "type": "object",
+                                    "^[a-zA-Z0-9_]+$": {
+                                        "oneOf": [
+                                            {
+                                                "type": "string"
+                                            },
+                                            {
+                                                "type": "object",
+                                                "properties": {
+                                                    "sql": {
+                                                        "type": [
+                                                            "string",
+                                                            "null"
+                                                        ]
+                                                    },
+                                                    "update_sql": {
+                                                        "type": [
+                                                            "string",
+                                                            "null"
+                                                        ]
+                                                    },
+                                                    "property": {
+                                                        "type": [
+                                                            "string",
+                                                            "array"
+                                                        ],
+                                                        "items": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "additionalProperties": false
+                                            }
+                                        ]
+                                    },
+                                    "minProperties": 1
+                                }
+                            },
+                            "additionalProperties": false
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        }
+    },
+    "required": ["name", "source_dir", "resources"],
+    "additionalProperties": false
+}

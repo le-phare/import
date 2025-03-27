@@ -63,3 +63,10 @@ resources:
 The file will move to a default `quarantine` directory in the defined `source_dir` or in the `quarantine.dir` value if you explicitly define its value.
 
 The `quarantine.rotation` define define the number of files to keep before deletion.
+
+## IDE Integration
+
+Beyond validating YAML syntax in your IDE, you can validate the definition of an import configuration using 
+the JSON schema `./lephare-import.schema.json`.
+
+This also provides contextual help for autocompletion and when hovering over a YAML key.
