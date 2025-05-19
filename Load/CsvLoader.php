@@ -193,7 +193,7 @@ class CsvLoader implements LoaderInterface
         }
 
         $fields = array_map(function (string $v) use ($connection) {
-            $v = (new AsciiSlugger())->slug($v, '_')->lower();
+            $v = (new AsciiSlugger())->slug($v, '_')->lower()->toString();
 
             return $connection->quoteIdentifier($v);
         }, $headers);

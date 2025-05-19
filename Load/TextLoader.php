@@ -34,7 +34,7 @@ class TextLoader implements LoaderInterface
         $platform = $connection->getDatabasePlatform();
 
         $fields = array_map(function ($v) use ($connection) {
-            $v = (new AsciiSlugger())->slug($v, '_')->lower();
+            $v = (new AsciiSlugger())->slug($v, '_')->lower()->toString();
 
             return $connection->quoteIdentifier($v);
         }, array_keys($resource->getCsvFields()));

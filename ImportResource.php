@@ -76,11 +76,11 @@ class ImportResource
         $table->addColumn('file_line_no', 'string', ['notnull' => false]);
 
         foreach ($this->config['load']['fields'] as $field => $definition) {
-            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower(), $definition['type'], $definition['options']);
+            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower()->toString(), $definition['type'], $definition['options']);
         }
 
         foreach ($this->config['load']['extra_fields'] as $field => $definition) {
-            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower(), $definition['type'], $definition['options']);
+            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower()->toString(), $definition['type'], $definition['options']);
         }
 
         foreach ($this->config['load']['indexes'] as $index) {
