@@ -2,7 +2,7 @@
 
 namespace LePhare\Import\Load;
 
-use Behat\Transliterator\Transliterator;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\DBAL\Connection;
 use ForceUTF8\Encoding;
 use LePhare\Import\Configuration\CredentialsInterface;
@@ -193,7 +193,7 @@ class CsvLoader implements LoaderInterface
         }
 
         $fields = array_map(function (string $v) use ($connection) {
-            $v = Transliterator::urlize($v, '_');
+            $v = (new AsciiSlugger())->slug($v, '_')->lower();
 
             return $connection->quoteIdentifier($v);
         }, $headers);

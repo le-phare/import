@@ -2,7 +2,7 @@
 
 namespace LePhare\Import;
 
-use Behat\Transliterator\Transliterator;
+use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\DBAL\Schema\Table;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\LoadStrategy\LoadStrategyInterface;
@@ -76,11 +76,11 @@ class ImportResource
         $table->addColumn('file_line_no', 'string', ['notnull' => false]);
 
         foreach ($this->config['load']['fields'] as $field => $definition) {
-            $table->addColumn(Transliterator::urlize($field, '_'), $definition['type'], $definition['options']);
+            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower(), $definition['type'], $definition['options']);
         }
 
         foreach ($this->config['load']['extra_fields'] as $field => $definition) {
-            $table->addColumn(Transliterator::urlize($field, '_'), $definition['type'], $definition['options']);
+            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower(), $definition['type'], $definition['options']);
         }
 
         foreach ($this->config['load']['indexes'] as $index) {
