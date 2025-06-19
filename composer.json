@@ -18,11 +18,11 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "behat/transliterator": "^1.1",
+        "behat/transliterator": "^1.5",
         "doctrine/collections": "^1.6|^2.0",
         "doctrine/dbal": "^2.13|^3.0",
         "monolog/monolog": "^2.0|^3.0",
-        "neitanod/forceutf8": "^2.0",
+        "neitanod/forceutf8": "^2.0.4",
         "psr/log": "^1.0|^2.0|^3.0",
         "symfony/config": "^5.4|^6.0|^7.0",
         "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
