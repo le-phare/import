@@ -2,11 +2,10 @@
 
 namespace LePhare\Import;
 
-use LePhare\Import\Service\Transliterator;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\DBAL\Schema\Table;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\LoadStrategy\LoadStrategyInterface;
+use LePhare\Import\Service\Transliterator;
 use Symfony\Component\Finder\Finder;
 
 class ImportResource

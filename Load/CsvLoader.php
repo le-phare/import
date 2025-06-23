@@ -2,13 +2,12 @@
 
 namespace LePhare\Import\Load;
 
-use LePhare\Import\Service\Transliterator;
-use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\DBAL\Connection;
 use ForceUTF8\Encoding;
 use LePhare\Import\Configuration\CredentialsInterface;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\ImportResource;
+use LePhare\Import\Service\Transliterator;
 
 /** @api */
 class CsvLoader implements LoaderInterface
