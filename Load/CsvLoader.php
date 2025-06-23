@@ -192,8 +192,9 @@ class CsvLoader implements LoaderInterface
             throw new ImportException('The first row of the CSV file must contain the same fields as defined in the configuration');
         }
 
-        $fields = array_map(function (string $v) use ($connection) {
-            $v = (new AsciiSlugger())->slug($v, '_')->lower()->toString();
+        $slugger = new AsciiSlugger();
+        $fields = array_map(function (string $v) use ($connection, &$slugger) {
+            $v = $slugger->slug($v, '_')->lower()->toString();
 
             return $connection->quoteIdentifier($v);
         }, $headers);

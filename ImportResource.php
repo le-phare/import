@@ -72,15 +72,15 @@ class ImportResource
     public function getTable(): Table
     {
         $table = new Table($this->getTablename());
-
         $table->addColumn('file_line_no', 'string', ['notnull' => false]);
+        $slugger = new AsciiSlugger();
 
         foreach ($this->config['load']['fields'] as $field => $definition) {
-            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower()->toString(), $definition['type'], $definition['options']);
+            $table->addColumn($slugger->slug($field, '_')->lower()->toString(), $definition['type'], $definition['options']);
         }
 
         foreach ($this->config['load']['extra_fields'] as $field => $definition) {
-            $table->addColumn((new AsciiSlugger())->slug($field, '_')->lower()->toString(), $definition['type'], $definition['options']);
+            $table->addColumn($slugger->slug($field, '_')->lower()->toString(), $definition['type'], $definition['options']);
         }
 
         foreach ($this->config['load']['indexes'] as $index) {
