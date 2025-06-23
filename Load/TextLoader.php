@@ -2,6 +2,7 @@
 
 namespace LePhare\Import\Load;
 
+use LePhare\Import\Service\Transliterator;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\DBAL\Connection;
 use ForceUTF8\Encoding;
@@ -33,9 +34,8 @@ class TextLoader implements LoaderInterface
         $connection = $this->connection;
         $platform = $connection->getDatabasePlatform();
 
-        $slugger = new AsciiSlugger();
-        $fields = array_map(function ($v) use ($connection, &$slugger) {
-            $v = $slugger->slug($v, '_')->lower()->toString();
+        $fields = array_map(function ($v) use ($connection) {
+            $v = Transliterator::urlize($v, '_');
 
             return $connection->quoteIdentifier($v);
         }, array_keys($resource->getCsvFields()));

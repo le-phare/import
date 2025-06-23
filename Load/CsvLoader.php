@@ -2,6 +2,7 @@
 
 namespace LePhare\Import\Load;
 
+use LePhare\Import\Service\Transliterator;
 use Symfony\Component\String\Slugger\AsciiSlugger;
 use Doctrine\DBAL\Connection;
 use ForceUTF8\Encoding;
@@ -192,9 +193,8 @@ class CsvLoader implements LoaderInterface
             throw new ImportException('The first row of the CSV file must contain the same fields as defined in the configuration');
         }
 
-        $slugger = new AsciiSlugger();
-        $fields = array_map(function (string $v) use ($connection, &$slugger) {
-            $v = $slugger->slug($v, '_')->lower()->toString();
+        $fields = array_map(function (string $v) use ($connection) {
+            $v = Transliterator::urlize($v, '_');
 
             return $connection->quoteIdentifier($v);
         }, $headers);
