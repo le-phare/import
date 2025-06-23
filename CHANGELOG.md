@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1](https://github.com/le-phare/import/compare/v2.2.0...v2.2.1) (2025-06-19)
+
+
+### Bug Fixes
+
+* **composer:** bump transliterator and forceutf8 to fix curly braces issue ([#23](https://github.com/le-phare/import/issues/23)) ([656e361](https://github.com/le-phare/import/commit/656e3610a9fe6464050570920e6f941006bfef04))
+
 ## [2.2.0](https://github.com/le-phare/import/compare/v2.1.0...v2.2.0) (2024-05-23)
 
 
