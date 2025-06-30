@@ -2,10 +2,10 @@
 
 namespace LePhare\Import;
 
-use Behat\Transliterator\Transliterator;
 use Doctrine\DBAL\Schema\Table;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\LoadStrategy\LoadStrategyInterface;
+use LePhare\Import\Util\Transliterator;
 use Symfony\Component\Finder\Finder;
 
 class ImportResource
@@ -72,7 +72,6 @@ class ImportResource
     public function getTable(): Table
     {
         $table = new Table($this->getTablename());
-
         $table->addColumn('file_line_no', 'string', ['notnull' => false]);
 
         foreach ($this->config['load']['fields'] as $field => $definition) {
