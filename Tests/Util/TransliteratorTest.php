@@ -31,5 +31,7 @@ class TransliteratorTest extends TestCase
         yield ['hello world!', 'hello-world'];
         yield ['helloWorld', 'helloworld'];
         yield ['HelloWorld', 'helloworld'];
+        yield ['N° Commande', 'n-commande'];
+        yield ['Désignation', 'designation'];
     }
 }
