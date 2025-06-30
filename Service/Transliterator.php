@@ -1,6 +1,6 @@
 <?php
 
-namespace LePhare\Import\Service;
+namespace LePhare\Import\Util;
 
 use Symfony\Component\String\Slugger\AsciiSlugger;
 
