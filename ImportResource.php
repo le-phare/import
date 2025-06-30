@@ -5,7 +5,7 @@ namespace LePhare\Import;
 use Doctrine\DBAL\Schema\Table;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\LoadStrategy\LoadStrategyInterface;
-use LePhare\Import\Service\Transliterator;
+use LePhare\Import\Util\Transliterator;
 use Symfony\Component\Finder\Finder;
 
 class ImportResource

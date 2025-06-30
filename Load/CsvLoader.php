@@ -7,7 +7,7 @@ use ForceUTF8\Encoding;
 use LePhare\Import\Configuration\CredentialsInterface;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\ImportResource;
-use LePhare\Import\Service\Transliterator;
+use LePhare\Import\Util\Transliterator;
 
 /** @api */
 class CsvLoader implements LoaderInterface
