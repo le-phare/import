@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.2](https://github.com/le-phare/import/compare/v2.2.1...v2.2.2) (2025-06-30)
+
+
+### Bug Fixes
+
+* **transliterator:** use symfony/string to replace behat/transliterator ([#22](https://github.com/le-phare/import/issues/22)) ([009a067](https://github.com/le-phare/import/commit/009a0676b03037da7b79b98733ff026760b96c0b))
+
 ## [2.2.1](https://github.com/le-phare/import/compare/v2.2.0...v2.2.1) (2025-06-19)
 
 
