@@ -5,6 +5,7 @@ namespace LePhare\Import\Subscriber;
 use Doctrine\Common\Collections\Collection;
 use LePhare\Import\Event\ImportEvent;
 use LePhare\Import\ImportEvents;
+use LePhare\Import\ImportResource;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Finder\Finder;
@@ -23,10 +24,11 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
     {
         $config = $event->getConfig();
         $logger = $event->getLogger();
+        $file = $event->getFile();
         $date = date('Ymd-His');
 
         if ($config['archive']['enabled']) {
-            $this->archive($date, $config, $logger);
+            $this->archive($date, $config, $logger, $file);
         }
     }
 
@@ -34,18 +36,19 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
     {
         $config = $event->getConfig();
         $logger = $event->getLogger();
+        $file = $event->getFile();
         $date = date('Ymd-His');
 
         if ($config['quarantine']['enabled']) {
-            $this->quarantine($date, $config, $logger);
+            $this->quarantine($date, $config, $logger, $file);
         }
     }
 
-    protected function archive(string $date, Collection $config, LoggerInterface $logger): void
+    protected function archive(string $date, Collection $config, LoggerInterface $logger, ?\SplFileInfo $file): void
     {
         $archivableResources = array_filter($config['resources'], fn ($resource) => $resource->isArchivable());
 
-        if ([] === (array) $archivableResources) {
+        if ([] === $archivableResources) {
             return;
         }
 
@@ -56,10 +59,16 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
 
         $archived = 0;
 
-        foreach ($archivableResources as $name => $resource) {
+        /** @var ImportResource $resource */
+        foreach ($archivableResources as $resource) {
             $archivableFiles = $resource->getSourceFiles($config['source_dir']);
 
             foreach ($archivableFiles as $archivableFile) {
+                // Only invalid files must be archived
+                if ($config['quarantine']['unit_work'] && $file instanceof \SplFileInfo && $file->getPathname() !== $archivableFile->getPathname()) {
+                    continue;
+                }
+
                 $sourceDir = basename(dirname($archivableFile->getRealPath()));
                 $archiveDest = "{$archiveDirectory}/{$sourceDir}/".$archivableFile->getBasename();
 
@@ -81,11 +90,11 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
         $this->rotate(dirname($archiveDirectory), $rotation, $logger);
     }
 
-    protected function quarantine(string $date, Collection $config, LoggerInterface $logger): void
+    protected function quarantine(string $date, Collection $config, LoggerInterface $logger, ?\SplFileInfo $file): void
     {
         $quarantinableResources = array_filter($config['resources'], fn ($resource) => $resource->isQuarantinable());
 
-        if ([] === (array) $quarantinableResources) {
+        if ([] === $quarantinableResources) {
             return;
         }
 
@@ -94,11 +103,17 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
 
         $quarantined = 0;
 
-        foreach ($quarantinableResources as $name => $resource) {
+        /** @var ImportResource $resource */
+        foreach ($quarantinableResources as $resource) {
             // List pattern matching files that must not be imported anymore
             $quarantinableFiles = $resource->getLoadMatchingFiles($config['source_dir']);
 
             foreach ($quarantinableFiles as $quarantinableFile) {
+                // Only invalid files must be quarantined
+                if ($config['quarantine']['unit_work'] && $file instanceof \SplFileInfo && $file->getPathname() !== $quarantinableFile->getPathname()) {
+                    continue;
+                }
+
                 $sourceDir = basename(dirname($quarantinableFile->getRealPath()));
                 $quarantineDest = "{$quarantineDirectory}/{$sourceDir}/".$quarantinableFile->getBasename();
 

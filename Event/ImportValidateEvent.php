@@ -9,24 +9,18 @@ use Psr\Log\LoggerInterface;
 class ImportValidateEvent extends ImportEvent
 {
     protected ImportResource $resource;
-    protected \SplFileInfo $file;
     protected bool $valid = true;
 
     public function __construct(Collection $config, ImportResource $resource, \SplFileInfo $file, LoggerInterface $logger)
     {
         parent::__construct($config, $logger);
         $this->resource = $resource;
-        $this->file = $file;
+        $this->setFile($file);
     }
 
     public function getResource(): ImportResource
     {
         return $this->resource;
-    }
-
-    public function getFile(): \SplFileInfo
-    {
-        return $this->file;
     }
 
     public function setValid($valid): self
