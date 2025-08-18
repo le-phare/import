@@ -3,6 +3,7 @@
 namespace LePhare\Import\Load;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use ForceUTF8\Encoding;
 use LePhare\Import\Configuration\CredentialsInterface;
 use LePhare\Import\Exception\ImportException;
@@ -40,13 +41,9 @@ class TextLoader implements LoaderInterface
         }, array_keys($resource->getCsvFields()));
         $fields = implode(',', $fields);
 
-        $from = $connection->quote($file);
         $tablename = $platform->quoteIdentifier($resource->getTablename());
-        $fieldDelimiter = $connection->quote($resource->getFieldDelimiter());
-        $lineDelimiter = $connection->quote($resource->getLineDelimiter());
-        $quoteCharacter = $connection->quote($resource->getQuoteCharacter());
 
-        if ('postgresql' === $platform->getName()) {
+        if ($platform instanceof PostgreSQLPlatform) {
             if (!function_exists('pg_connect')) {
                 throw new ImportException('You need the pgsql extension to load CSV in PostgreSQL');
             }
@@ -89,7 +86,7 @@ class TextLoader implements LoaderInterface
             pg_end_copy($pg);
             pg_close($pg);
         } else {
-            throw new ImportException($platform->getName().' platform is not supported');
+            throw new ImportException($platform::class.' platform is not supported');
         }
 
         return $loaded;

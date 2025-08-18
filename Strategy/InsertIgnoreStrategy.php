@@ -5,6 +5,8 @@ namespace LePhare\Import\Strategy;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Exception\NotNullConstraintViolationException;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\ImportResource;
 
@@ -24,14 +26,14 @@ class InsertIgnoreStrategy implements StrategyInterface
 
     public function copy(ImportResource $resource): int
     {
-        $platformName = $this->connection->getDatabasePlatform()->getName();
+        $platform = $this->connection->getDatabasePlatform();
 
-        if ('mysql' === $platformName) {
+        if ($platform instanceof MySQLPlatform) {
             $rowCount = $this->mysqlCopy($resource);
-        } elseif ('postgresql' === $platformName) {
+        } elseif ($platform instanceof PostgreSQLPlatform) {
             $rowCount = $this->postgresqlCopy($resource);
         } else {
-            throw new ImportException('insert_ignore strategy is not implemented for '.$platformName);
+            throw new ImportException('insert_ignore strategy is not implemented for '.$platform::class);
         }
 
         return $rowCount;

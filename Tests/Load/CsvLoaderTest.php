@@ -42,10 +42,10 @@ class CsvLoaderTest extends TestCase
         $fields = $data[0];
 
         $filename = self::TEST_FILEPATH;
+        $platform = new PostgreSQLPlatform();
+        $this->connection->getDatabasePlatform()->willReturn($platform);
 
         if (!$expectImportException) {
-            $platform = new PostgreSQLPlatform();
-            $this->connection->getDatabasePlatform()->willReturn($platform);
             $this->connection->quote($filename)->willReturn($platform->quoteStringLiteral($filename));
             $this->connection->quote(',')->willReturn($platform->quoteStringLiteral(','));
             $this->connection->quote('\n')->willReturn($platform->quoteStringLiteral('\n'));
