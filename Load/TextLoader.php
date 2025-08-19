@@ -86,7 +86,7 @@ class TextLoader implements LoaderInterface
             pg_end_copy($pg);
             pg_close($pg);
         } else {
-            throw new ImportException($platform::class.' platform is not supported');
+            throw new ImportException(get_class($platform).' platform is not supported');
         }
 
         return $loaded;

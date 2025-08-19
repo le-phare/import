@@ -33,7 +33,7 @@ class InsertIgnoreStrategy implements StrategyInterface
         } elseif ($platform instanceof PostgreSQLPlatform) {
             $rowCount = $this->postgresqlCopy($resource);
         } else {
-            throw new ImportException('insert_ignore strategy is not implemented for '.$platform::class);
+            throw new ImportException('insert_ignore strategy is not implemented for '.get_class($platform));
         }
 
         return $rowCount;
