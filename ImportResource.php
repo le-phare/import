@@ -221,4 +221,9 @@ class ImportResource
     {
         return $this->config['load']['format'];
     }
+
+    public function getFailIfNotLoaded(): bool
+    {
+        return $this->config['load']['fail_if_not_loaded'] ?? false;
+    }
 }

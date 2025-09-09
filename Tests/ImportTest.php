@@ -3,6 +3,8 @@
 namespace LePhare\Import\Tests;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Result;
 use LePhare\Import\Exception\ExceptionInterface;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\Import;
@@ -145,6 +147,68 @@ final class ImportTest extends TestCase
                     ],
                 ],
             ], ]));
+
+        $this->assertFalse($this->import->execute());
+    }
+
+    public function testExecuteWithFailIfNotLoadedFalseOptionShouldSucceed(): void
+    {
+        $this->connection->getDatabasePlatform()->willReturn(new PostgreSQLPlatform());
+        $result = $this->prophesize(Result::class);
+        $this->connection->executeQuery(Argument::any())->willReturn($result->reveal());
+
+        $this->import->init(array_merge(self::config, [
+            'resources' => [
+                'foo' => [
+                    'tablename' => 'import.users',
+                    'load' => [
+                        'fail_if_not_loaded' => false,
+                        'pattern' => 'bar.csv',
+                        'format_options' => [
+                            'validate_headers' => true,
+                            'with_header' => true,
+                            'field_delimiter' => ',',
+                            'line_delimiter' => "\n",
+                        ],
+                        'fields' => [
+                            'id' => 'integer',
+                        ],
+                        'strategy' => 'load_alphabetically',
+                    ],
+                ],
+            ],
+        ]));
+
+        $this->assertTrue($this->import->execute());
+    }
+
+    public function testExecuteWithFailIfNotLoadedTrueOptionShouldFail(): void
+    {
+        $this->connection->getDatabasePlatform()->willReturn(new PostgreSQLPlatform());
+        $result = $this->prophesize(Result::class);
+        $this->connection->executeQuery(Argument::any())->willReturn($result->reveal());
+
+        $this->import->init(array_merge(self::config, [
+            'resources' => [
+                'foo' => [
+                    'tablename' => 'import.users',
+                    'load' => [
+                        'fail_if_not_loaded' => true,
+                        'pattern' => 'bar.csv',
+                        'format_options' => [
+                            'validate_headers' => true,
+                            'with_header' => true,
+                            'field_delimiter' => ',',
+                            'line_delimiter' => "\n",
+                        ],
+                        'fields' => [
+                            'id' => 'integer',
+                        ],
+                        'strategy' => 'load_alphabetically',
+                    ],
+                ],
+            ],
+        ]));
 
         $this->assertFalse($this->import->execute());
     }
