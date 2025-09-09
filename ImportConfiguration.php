@@ -117,6 +117,7 @@ class ImportConfiguration implements ConfigurationInterface
             ->children()
             ->scalarNode('pattern')->cannotBeEmpty()->end()
             ->booleanNode('add_file_line_number')->defaultTrue()->end()
+            ->booleanNode('fail_if_not_loaded')->defaultFalse()->end()
             ->scalarNode('format')
             ->cannotBeEmpty()
             ->defaultValue('csv')

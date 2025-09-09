@@ -12,6 +12,7 @@ use LePhare\Import\Event\ImportExceptionEvent;
 use LePhare\Import\Event\ImportValidateEvent;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\Exception\LowLevelException;
+use LePhare\Import\Exception\ResourceNotLoadedException;
 use LePhare\Import\Load\LoaderInterface;
 use LePhare\Import\LoadStrategy\LoadStrategyInterface;
 use LePhare\Import\LoadStrategy\LoadStrategyRepositoryInterface;
@@ -123,6 +124,7 @@ class Import implements ImportInterface
             throw new LowLevelException($e->getMessage(), $e->getCode(), $e);
         } catch (\Exception $e) {
             $this->logger->critical('An exception occurred: {message}', [
+                'exception' => $e,
                 'message' => $e->getMessage(),
             ]);
             $this->dispatchException($e);
@@ -159,9 +161,16 @@ class Import implements ImportInterface
         }
 
         $loaded = false;
+
         foreach ($this->config['resources'] as $name => $resource) {
             if ($resource->isLoadable()) {
-                $loaded = $this->loadResource($resource) || $loaded;
+                $resourceLoaded = $this->loadResource($resource);
+
+                if (!$resourceLoaded && $resource->getFailIfNotLoaded()) {
+                    throw new ResourceNotLoadedException(sprintf('Resource "%s" is missing', $resource->getName()));
+                }
+
+                $loaded = $resourceLoaded || $loaded;
             }
         }
 
