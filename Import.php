@@ -196,6 +196,7 @@ class Import implements ImportInterface
         foreach ($files as $file) {
             $this->logger->debug('load resource {file}', [
                 'file' => $file->getBasename(),
+                'path' => $file->getPath(),
             ]);
             if ($this->dispatcher->hasListeners(ImportEvents::VALIDATE_SOURCE)) {
                 $this->logger->debug('Dispatch VALIDATE_SOURCE event');
@@ -203,15 +204,15 @@ class Import implements ImportInterface
                 $event = $this->dispatcher->dispatch($event, ImportEvents::VALIDATE_SOURCE);
 
                 if (!$event->isValid()) {
-                    throw new ImportException(sprintf("The file '%s' is not valid", $file->getBasename()));
+                    throw new ImportException(sprintf("The file '%s' is not valid", $file->getPathname()));
                 }
             }
 
             if (($count = $this->loadData($resource, $file)) !== 0) {
                 $this->logger->notice('{file}: {count} lines loaded', [
                     'file' => $file->getBasename(),
-                    'count' => $count, ]
-                );
+                    'count' => $count,
+                ]);
                 $loaded = true;
             }
         }
