@@ -170,6 +170,7 @@ class ImportConfigurationTest extends TestCase
                             ],
                             'extra_fields' => [],
                             'indexes' => [],
+                            'fail_if_not_loaded' => false,
                         ],
                     ],
                 ],

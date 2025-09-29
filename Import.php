@@ -12,6 +12,7 @@ use LePhare\Import\Event\ImportExceptionEvent;
 use LePhare\Import\Event\ImportValidateEvent;
 use LePhare\Import\Exception\ImportException;
 use LePhare\Import\Exception\LowLevelException;
+use LePhare\Import\Exception\ResourceNotLoadedException;
 use LePhare\Import\Load\LoaderInterface;
 use LePhare\Import\LoadStrategy\LoadStrategyInterface;
 use LePhare\Import\LoadStrategy\LoadStrategyRepositoryInterface;
@@ -124,6 +125,7 @@ class Import implements ImportInterface
             throw new LowLevelException($e->getMessage(), $e->getCode(), $e);
         } catch (\Exception $e) {
             $this->logger->critical('An exception occurred: {message}', [
+                'exception' => $e,
                 'message' => $e->getMessage(),
             ]);
             $this->dispatchException($e);
@@ -162,7 +164,13 @@ class Import implements ImportInterface
         $loaded = false;
         foreach ($this->config['resources'] as $resource) {
             if ($resource->isLoadable()) {
-                $loaded = $this->loadResource($resource) || $loaded;
+                $resourceLoaded = $this->loadResource($resource);
+
+                if (!$resourceLoaded && $resource->getFailIfNotLoaded()) {
+                    throw new ResourceNotLoadedException(sprintf('Resource "%s" is missing', $resource->getName()));
+                }
+
+                $loaded = $resourceLoaded || $loaded;
             }
         }
 
@@ -189,6 +197,7 @@ class Import implements ImportInterface
             $this->file = $file;
             $this->logger->debug('load resource {file}', [
                 'file' => $file->getBasename(),
+                'path' => $file->getPath(),
             ]);
             if ($this->dispatcher->hasListeners(ImportEvents::VALIDATE_SOURCE)) {
                 $this->logger->debug('Dispatch VALIDATE_SOURCE event');
@@ -196,15 +205,15 @@ class Import implements ImportInterface
                 $event = $this->dispatcher->dispatch($event, ImportEvents::VALIDATE_SOURCE);
 
                 if (!$event->isValid()) {
-                    throw new ImportException(sprintf("The file '%s' is not valid", $file->getBasename()));
+                    throw new ImportException(sprintf("The file '%s' is not valid", $file->getPathname()));
                 }
             }
 
             if (($count = $this->loadData($resource, $file)) !== 0) {
                 $this->logger->notice('{file}: {count} lines loaded', [
                     'file' => $file->getBasename(),
-                    'count' => $count, ]
-                );
+                    'count' => $count,
+                ]);
                 $loaded = true;
             }
         }

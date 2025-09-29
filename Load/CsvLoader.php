@@ -3,6 +3,8 @@
 namespace LePhare\Import\Load;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use ForceUTF8\Encoding;
 use LePhare\Import\Configuration\CredentialsInterface;
 use LePhare\Import\Exception\ImportException;
@@ -48,7 +50,7 @@ class CsvLoader implements LoaderInterface
         $nullString = $connection->quote($resource->getNullString());
         $addLineNumber = $resource->getAddLineNumber();
 
-        if ('mysql' === $platform->getName()) {
+        if ($platform instanceof MySQLPlatform) {
             if (!class_exists('\MySQLi')) {
                 throw new ImportException('You need the mysqli extension to load CSV in MySQL');
             }
@@ -100,7 +102,7 @@ class CsvLoader implements LoaderInterface
             $conn->close();
 
             $loaded = $rowCount;
-        } elseif ('postgresql' === $platform->getName()) {
+        } elseif ($platform instanceof PostgreSQLPlatform) {
             if (!function_exists('pg_connect')) {
                 throw new ImportException('You need the pgsql extension to load CSV in PostgreSQL');
             }
@@ -176,7 +178,7 @@ class CsvLoader implements LoaderInterface
 
             pg_close($pg);
         } else {
-            throw new ImportException($platform->getName().' platform is not supported');
+            throw new ImportException(get_class($platform).' platform is not supported');
         }
 
         return $loaded;

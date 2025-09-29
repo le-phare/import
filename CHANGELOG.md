@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.3.0](https://github.com/le-phare/import/compare/v2.2.2...v2.3.0) (2025-08-25)
+
+
+### Features
+
+* **doctrine:** add Doctrine DBAL 4 support ([#28](https://github.com/le-phare/import/issues/28)) ([876972a](https://github.com/le-phare/import/commit/876972a7d9c776e9f105eb7530593199a82847bc))
+
 ## [2.2.2](https://github.com/le-phare/import/compare/v2.2.1...v2.2.2) (2025-06-30)
 
 
