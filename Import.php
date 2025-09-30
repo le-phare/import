@@ -32,6 +32,7 @@ class Import implements ImportInterface
     protected Collection $config;
     protected StrategyRepositoryInterface $strategyRepository;
     protected LoadStrategyRepositoryInterface $loadStrategyRepository;
+    protected ?\SplFileInfo $file = null;
 
     /** @var ArrayCollection<int, LoaderInterface> */
     private ArrayCollection $loaders;
@@ -139,7 +140,7 @@ class Import implements ImportInterface
     {
         if ($this->dispatcher->hasListeners(ImportEvents::EXCEPTION)) {
             $this->logger->debug('Dispatch EXCEPTION event');
-            $event = new ImportExceptionEvent($this->config, $throwable, $this->logger);
+            $event = new ImportExceptionEvent($this->config, $throwable, $this->logger, $this->file);
             $this->dispatcher->dispatch($event, ImportEvents::EXCEPTION);
         }
     }
@@ -150,7 +151,7 @@ class Import implements ImportInterface
 
         $loadableResources = array_filter($this->config['resources'], fn ($resource) => $resource->isLoadable());
 
-        foreach ($loadableResources as $name => $resource) {
+        foreach ($loadableResources as $resource) {
             $this->createTable($resource);
         }
 
@@ -161,8 +162,7 @@ class Import implements ImportInterface
         }
 
         $loaded = false;
-
-        foreach ($this->config['resources'] as $name => $resource) {
+        foreach ($this->config['resources'] as $resource) {
             if ($resource->isLoadable()) {
                 $resourceLoaded = $this->loadResource($resource);
 
@@ -177,7 +177,7 @@ class Import implements ImportInterface
         if ($this->dispatcher->hasListeners(ImportEvents::POST_LOAD)) {
             $this->logger->debug('Dispatch POST_LOAD event');
             $event = new ImportEvent($this->config, $this->logger);
-            $event = $this->dispatcher->dispatch($event, ImportEvents::POST_LOAD);
+            $this->dispatcher->dispatch($event, ImportEvents::POST_LOAD);
         }
 
         if (!$loaded) {
@@ -194,6 +194,7 @@ class Import implements ImportInterface
         $files = $resource->getSourceFiles($this->config['source_dir']);
 
         foreach ($files as $file) {
+            $this->file = $file;
             $this->logger->debug('load resource {file}', [
                 'file' => $file->getBasename(),
                 'path' => $file->getPath(),

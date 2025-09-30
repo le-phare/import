@@ -13,6 +13,7 @@ class ImportEvent extends Event
     protected Collection $config;
     protected LoggerInterface $logger;
     protected $logFile;
+    protected ?\SplFileInfo $file = null;
 
     public function __construct(Collection $config, LoggerInterface $logger)
     {
@@ -48,5 +49,17 @@ class ImportEvent extends Event
         }
 
         return $this->logFile;
+    }
+
+    public function setFile(?\SplFileInfo $file): ImportEvent
+    {
+        $this->file = $file;
+
+        return $this;
+    }
+
+    public function getFile(): ?\SplFileInfo
+    {
+        return $this->file;
     }
 }
