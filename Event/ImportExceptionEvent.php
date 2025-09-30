@@ -9,7 +9,7 @@ class ImportExceptionEvent extends ImportEvent
 {
     protected \Throwable $throwable;
 
-    public function __construct(Collection $config, \Throwable $throwable, LoggerInterface $logger, \SplFileInfo $file)
+    public function __construct(Collection $config, \Throwable $throwable, LoggerInterface $logger, ?\SplFileInfo $file = null)
     {
         parent::__construct($config, $logger);
         $this->throwable = $throwable;

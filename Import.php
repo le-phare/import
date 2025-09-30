@@ -32,7 +32,7 @@ class Import implements ImportInterface
     protected Collection $config;
     protected StrategyRepositoryInterface $strategyRepository;
     protected LoadStrategyRepositoryInterface $loadStrategyRepository;
-    protected \SplFileInfo $file;
+    protected ?\SplFileInfo $file = null;
 
     /** @var ArrayCollection<int, LoaderInterface> */
     private ArrayCollection $loaders;
