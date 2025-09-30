@@ -24,11 +24,10 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
     {
         $config = $event->getConfig();
         $logger = $event->getLogger();
-        $file = $event->getFile();
         $date = date('Ymd-His');
 
         if ($config['archive']['enabled']) {
-            $this->archive($date, $config, $logger, $file);
+            $this->archive($date, $config, $logger);
         }
     }
 
@@ -44,7 +43,7 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
         }
     }
 
-    protected function archive(string $date, Collection $config, LoggerInterface $logger, ?\SplFileInfo $file): void
+    protected function archive(string $date, Collection $config, LoggerInterface $logger): void
     {
         $archivableResources = array_filter($config['resources'], fn ($resource) => $resource->isArchivable());
 
@@ -64,11 +63,6 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
             $archivableFiles = $resource->getSourceFiles($config['source_dir']);
 
             foreach ($archivableFiles as $archivableFile) {
-                // Only invalid files must be archived
-                if ($config['quarantine']['unit_work'] && $file instanceof \SplFileInfo && $file->getPathname() !== $archivableFile->getPathname()) {
-                    continue;
-                }
-
                 $sourceDir = basename(dirname($archivableFile->getRealPath()));
                 $archiveDest = "{$archiveDirectory}/{$sourceDir}/".$archivableFile->getBasename();
 
