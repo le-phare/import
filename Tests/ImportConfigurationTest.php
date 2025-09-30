@@ -82,12 +82,12 @@ class ImportConfigurationTest extends TestCase
                 'dir' => null,
                 'enabled' => true,
                 'rotation' => 30,
-                'unit_work' => false,
             ],
             'quarantine' => [
                 'dir' => null,
                 'enabled' => true,
                 'rotation' => 30,
+                'unit_work' => false,
             ],
             'email_report' => [
                 'recipients' => [],
