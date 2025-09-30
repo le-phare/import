@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0](https://github.com/le-phare/import/compare/v2.3.0...v2.4.0) (2025-09-30)
+
+
+### Features
+
+* add unit_work option to quarantine only invalid file ([#27](https://github.com/le-phare/import/issues/27)) ([86b9f80](https://github.com/le-phare/import/commit/86b9f80e1ae668309f39203eb9fd211b79dc771c))
+* **import:** add fail_if_not_loaded option ([#30](https://github.com/le-phare/import/issues/30)) ([41976ed](https://github.com/le-phare/import/commit/41976ed51a14b83c44130348cc71a4981a83699a))
+* show resource path on debug mode and when exception thrown ([#31](https://github.com/le-phare/import/issues/31)) ([eb3baf5](https://github.com/le-phare/import/commit/eb3baf58a7f3daa6b9b82abb1759f56e13a00e08))
+
 ## [2.3.0](https://github.com/le-phare/import/compare/v2.2.2...v2.3.0) (2025-08-25)
 
 
