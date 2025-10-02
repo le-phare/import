@@ -27,7 +27,7 @@
         "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
         "symfony/finder": "^5.4|^6.0|^7.0",
         "symfony/string": "^5.4|^6.0|^7.0",
-        "symfony/translation-contracts": "^2.5"
+        "symfony/translation-contracts": "^1|^2|^3"
     },
     "autoload": {
         "psr-4": {
