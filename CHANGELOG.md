@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.1](https://github.com/le-phare/import/compare/v2.4.0...v2.4.1) (2025-10-02)
+
+
+### Bug Fixes
+
+* **composer:** broader symfony/translation-contracts version constraint ([3d68b3b](https://github.com/le-phare/import/commit/3d68b3b5a4f8caace3c459103674064569e6b6a1))
+
 ## [2.4.0](https://github.com/le-phare/import/compare/v2.3.0...v2.4.0) (2025-09-30)
 
 
