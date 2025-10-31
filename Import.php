@@ -291,11 +291,8 @@ class Import implements ImportInterface
             $connection->executeQuery("CREATE SCHEMA IF NOT EXISTS {$schema}");
         }
 
-        try {
-            $connection->executeQuery($platform->getDropTableSQL($resource->getTablename()));
-        } catch (DBALException|\Exception $e) {
-            // Do nothing
-        }
+        $dropTableSQL = $platform->getDropTableSQL($resource->getTablename(), true);
+        $connection->executeStatement($dropTableSQL);
 
         foreach ($platform->getCreateTableSQL($resource->getTable()) as $sql) {
             $connection->executeQuery($sql);
