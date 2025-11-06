@@ -49,6 +49,7 @@
         }
     },
     "require-dev": {
+        "behat/transliterator": "^1.5",
         "friendsofphp/php-cs-fixer": "^3.3",
         "jangregor/phpstan-prophecy": "^1.0",
         "php-mock/php-mock-prophecy": "^0.1.1",

@@ -2,6 +2,7 @@
 
 namespace LePhare\Import\Util;
 
+use Behat\Transliterator\Transliterator as BehatTransliterator;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,6 +17,7 @@ class TransliteratorTest extends TestCase
      */
     public function testUrlize(string $input, string $separator, string $expected): void
     {
+        $this->assertEquals(BehatTransliterator::urlize($input, $separator), $expected, "Wrong expected value: replace it by Behat's Transliterator output");
         $this->assertEquals($expected, Transliterator::urlize($input, $separator));
     }
 
@@ -33,6 +35,7 @@ class TransliteratorTest extends TestCase
         yield ['HelloWorld', '-', 'helloworld'];
         yield ['N° Commande', '-', 'n-commande'];
         yield ['Désignation', '-', 'designation'];
+        yield ["Attention à l'apostrophe", '-', 'attention-a-lapostrophe'];
 
         yield ['foo', '_', 'foo'];
         yield ['FOO', '_', 'foo'];
@@ -46,5 +49,6 @@ class TransliteratorTest extends TestCase
         yield ['HelloWorld', '_', 'helloworld'];
         yield ['N° Commande', '_', 'n_commande'];
         yield ['Désignation', '_', 'designation'];
+        yield ["Attention à l'apostrophe", '_', 'attention_a_lapostrophe'];
     }
 }
