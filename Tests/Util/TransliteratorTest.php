@@ -36,6 +36,8 @@ class TransliteratorTest extends TestCase
         yield ['N° Commande', '-', 'n-commande'];
         yield ['Désignation', '-', 'designation'];
         yield ["Attention à l'apostrophe", '-', 'attention-a-lapostrophe'];
+        yield ["'citation' test", '-', 'citation-test'];
+        yield ["'citation'test", '-', 'citationtest'];
 
         yield ['foo', '_', 'foo'];
         yield ['FOO', '_', 'foo'];
@@ -50,5 +52,7 @@ class TransliteratorTest extends TestCase
         yield ['N° Commande', '_', 'n_commande'];
         yield ['Désignation', '_', 'designation'];
         yield ["Attention à l'apostrophe", '_', 'attention_a_lapostrophe'];
+        yield ["'citation' test", '_', 'citation_test'];
+        yield ["'citation'test", '_', 'citationtest'];
     }
 }

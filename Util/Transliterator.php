@@ -13,8 +13,8 @@ class Transliterator
      */
     public static function urlize(string $text, string $separator = '-'): string
     {
-        $slugger = new AsciiSlugger();
-        $slugged = $slugger->slug($text, $separator)
+        $slugged = (new AsciiSlugger())
+            ->slug(self::preProcessText($text, $separator), $separator)
             ->lower()
             ->trim()
             ->toString()
@@ -26,11 +26,17 @@ class Transliterator
     /**
      * Cleans up the text and adds separator.
      */
-    private static function postProcessText(string $text, string $separator): string
+    private static function preProcessText(string $text, string $separator): string
     {
         // Remove apostrophes which are not used as quotes around a string
-        $text = preg_replace('/(\w)\'(\w)/', '${1}${2}', $text);
+        return preg_replace('/(\w)\'(\w)/', '${1}${2}', $text);
+    }
 
+    /**
+     * Cleans up the text and adds separator.
+     */
+    private static function postProcessText(string $text, string $separator): string
+    {
         // Replace all none word characters with a space
         $text = preg_replace('/\W/', ' ', $text);
 
