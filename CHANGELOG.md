@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.2](https://github.com/le-phare/import/compare/v2.4.1...v2.4.2) (2025-11-06)
+
+
+### Bug Fixes
+
+* **transliterator:** replace apostrophes before slugging ([#36](https://github.com/le-phare/import/issues/36)) ([1609562](https://github.com/le-phare/import/commit/1609562533161841531b0885d9a2bfc2cd2ba185))
+
 ## [2.4.1](https://github.com/le-phare/import/compare/v2.4.0...v2.4.1) (2025-10-02)
 
 
