@@ -11,6 +11,7 @@ use Symfony\Component\Finder\Finder;
 class ImportResource
 {
     private bool $readOnly = false;
+    private bool $isSharedConnection = false;
     protected string $name;
     protected array $config;
     protected ?LoadStrategyInterface $loadStrategy = null;
@@ -57,6 +58,18 @@ class ImportResource
         $this->loadStrategy = $loadStrategy;
 
         return $this;
+    }
+
+    public function setSharedConnection(bool $isSharedConnection): self
+    {
+        $this->isSharedConnection = $isSharedConnection;
+
+        return $this;
+    }
+
+    public function isSharedConnection(): bool
+    {
+        return $this->isSharedConnection;
     }
 
     public function isLoadable(): bool

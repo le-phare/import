@@ -213,6 +213,191 @@ final class ImportTest extends TestCase
         $this->assertFalse($this->import->execute());
     }
 
+    public function testSharedConnectionModeIsSetCorrectly(): void
+    {
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->hasListeners(Argument::any())->willReturn(false);
+
+        $import = new Import(
+            $this->connection->reveal(),
+            $eventDispatcher->reveal(),
+            $this->prophesize(StrategyRepositoryInterface::class)->reveal(),
+            $this->loadStrategyRepository->reveal(),
+            new ImportConfiguration(),
+            $this->logger->reveal(),
+            true // Enable shared connection mode
+        );
+
+        $this->assertTrue($import->isSharedConnection());
+    }
+
+    public function testSharedConnectionModeDefaultsToFalse(): void
+    {
+        $this->assertFalse($this->import->isSharedConnection());
+    }
+
+    /**
+     * @uses \LePhare\Import\ImportResource
+     * @uses \LePhare\Import\Strategy\InsertStrategy
+     */
+    public function testTransactionsAreUsedWhenSharedConnectionModeIsDisabled(): void
+    {
+        // Create a real InsertStrategy with a mocked connection
+        $connection = $this->prophesize(Connection::class);
+        $platform = new PostgreSQLPlatform();
+        $connection->getDatabasePlatform()->willReturn($platform);
+        $connection->quoteIdentifier(Argument::any())->will(function ($args) use ($platform) {
+            return $platform->quoteIdentifier($args[0]);
+        });
+
+        // Create strategy repository with InsertStrategy
+        $strategyRepository = $this->prophesize(StrategyRepositoryInterface::class);
+        $insertStrategy = new \LePhare\Import\Strategy\InsertStrategy($connection->reveal());
+        $strategyRepository->getStrategy('insert')->willReturn($insertStrategy);
+
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->hasListeners(Argument::any())->willReturn(false);
+
+        $import = new Import(
+            $connection->reveal(),
+            $eventDispatcher->reveal(),
+            $strategyRepository->reveal(),
+            $this->loadStrategyRepository->reveal(),
+            new ImportConfiguration(),
+            $this->logger->reveal(),
+            false // Shared connection mode disabled (default)
+        );
+
+        // Setup expectations: beginTransaction and commit should be called
+        $connection->beginTransaction()->shouldBeCalledOnce();
+        $result = $this->prophesize(Result::class);
+        $result->rowCount()->willReturn(5);
+        $connection->executeQuery(Argument::any())->willReturn($result->reveal());
+        $connection->commit()->shouldBeCalledOnce();
+        $connection->executeQuery(Argument::containingString('CREATE SCHEMA'))->willReturn($result->reveal());
+        $connection->executeQuery(Argument::containingString('DROP TABLE'))->willReturn($result->reveal());
+        $connection->executeQuery(Argument::containingString('CREATE TABLE'))->willReturn($result->reveal());
+
+        $config = [
+            'name' => 'test',
+            'source_dir' => '/tmp',
+            'resources' => [
+                'test_resource' => [
+                    'tablename' => 'import.test_table',
+                    'load' => [
+                        'pattern' => 'test.csv',
+                        'format_options' => [
+                            'validate_headers' => true,
+                            'with_header' => true,
+                            'field_delimiter' => ',',
+                            'line_delimiter' => "\n",
+                        ],
+                        'fields' => [
+                            'id' => 'integer',
+                        ],
+                        'strategy' => 'load_alphabetically',
+                    ],
+                    'copy' => [
+                        'target' => 'public.target_table',
+                        'strategy' => 'insert',
+                        'mapping' => [
+                            'id' => 'id',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $import->init($config);
+        $import->copy();
+
+        // Verify that beginTransaction and commit were called
+        $connection->beginTransaction()->shouldHaveBeenCalled();
+        $connection->commit()->shouldHaveBeenCalled();
+    }
+
+    /**
+     * @uses \LePhare\Import\ImportResource
+     * @uses \LePhare\Import\Strategy\InsertStrategy
+     */
+    public function testTransactionsAreNotUsedWhenSharedConnectionModeIsEnabled(): void
+    {
+        // Create a real InsertStrategy with a mocked connection
+        $connection = $this->prophesize(Connection::class);
+        $platform = new PostgreSQLPlatform();
+        $connection->getDatabasePlatform()->willReturn($platform);
+        $connection->quoteIdentifier(Argument::any())->will(function ($args) use ($platform) {
+            return $platform->quoteIdentifier($args[0]);
+        });
+
+        // Create strategy repository with InsertStrategy
+        $strategyRepository = $this->prophesize(StrategyRepositoryInterface::class);
+        $insertStrategy = new \LePhare\Import\Strategy\InsertStrategy($connection->reveal());
+        $strategyRepository->getStrategy('insert')->willReturn($insertStrategy);
+
+        $eventDispatcher = $this->prophesize(EventDispatcherInterface::class);
+        $eventDispatcher->hasListeners(Argument::any())->willReturn(false);
+
+        $import = new Import(
+            $connection->reveal(),
+            $eventDispatcher->reveal(),
+            $strategyRepository->reveal(),
+            $this->loadStrategyRepository->reveal(),
+            new ImportConfiguration(),
+            $this->logger->reveal(),
+            true // Shared connection mode ENABLED
+        );
+
+        // Setup expectations: beginTransaction and commit should NOT be called
+        $connection->beginTransaction()->shouldNotBeCalled();
+        $result = $this->prophesize(Result::class);
+        $result->rowCount()->willReturn(5);
+        $connection->executeQuery(Argument::any())->willReturn($result->reveal());
+        $connection->commit()->shouldNotBeCalled();
+        $connection->rollback()->shouldNotBeCalled();
+        $connection->executeQuery(Argument::containingString('CREATE SCHEMA'))->willReturn($result->reveal());
+        $connection->executeQuery(Argument::containingString('DROP TABLE'))->willReturn($result->reveal());
+        $connection->executeQuery(Argument::containingString('CREATE TABLE'))->willReturn($result->reveal());
+
+        $config = [
+            'name' => 'test',
+            'source_dir' => '/tmp',
+            'resources' => [
+                'test_resource' => [
+                    'tablename' => 'import.test_table',
+                    'load' => [
+                        'pattern' => 'test.csv',
+                        'format_options' => [
+                            'validate_headers' => true,
+                            'with_header' => true,
+                            'field_delimiter' => ',',
+                            'line_delimiter' => "\n",
+                        ],
+                        'fields' => [
+                            'id' => 'integer',
+                        ],
+                        'strategy' => 'load_alphabetically',
+                    ],
+                    'copy' => [
+                        'target' => 'public.target_table',
+                        'strategy' => 'insert',
+                        'mapping' => [
+                            'id' => 'id',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $import->init($config);
+        $import->copy();
+
+        // Verify that beginTransaction, commit, and rollback were NOT called
+        $connection->beginTransaction()->shouldNotHaveBeenCalled();
+        $connection->commit()->shouldNotHaveBeenCalled();
+        $connection->rollback()->shouldNotHaveBeenCalled();
+    }
+
     public function tearDown(): void
     {
         @unlink('/tmp/config.yml');
