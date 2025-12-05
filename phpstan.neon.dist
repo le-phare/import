@@ -15,4 +15,5 @@ parameters:
             message: '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::.+\(\)#'
             paths:
                 - ImportConfiguration.php
+    reportUnmatchedIgnoredErrors: false # required for different versions of Symfony
     tmpDir: .phpstan.cache
