@@ -42,7 +42,7 @@ class ValidateCSVHeadersSubscriber implements EventSubscriberInterface
             fseek($fh, 0);
         }
 
-        $headers = fgetcsv($fh, 0, $config['load']['format_options']['field_delimiter']);
+        $headers = fgetcsv($fh, 0, $config['load']['format_options']['field_delimiter'], '"', '');
         fclose($fh);
 
         $expectedHeaders = array_keys($config['load']['fields']);
