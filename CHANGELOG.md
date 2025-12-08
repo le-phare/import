@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.3](https://github.com/le-phare/import/compare/v2.4.2...v2.4.3) (2025-12-08)
+
+
+### Miscellaneous Chores
+
+* **composer:** allow Symfony 8 ([#39](https://github.com/le-phare/import/issues/39)) ([4504daf](https://github.com/le-phare/import/commit/4504daf5c28f1d5590885b452b8973d68d294a6f))
+
 ## [2.4.2](https://github.com/le-phare/import/compare/v2.4.1...v2.4.2) (2025-11-06)
 
 
