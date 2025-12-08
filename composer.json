@@ -23,10 +23,10 @@
         "monolog/monolog": "^2.0|^3.0",
         "neitanod/forceutf8": "^2.0.4",
         "psr/log": "^1.0|^2.0|^3.0",
-        "symfony/config": "^5.4|^6.0|^7.0",
-        "symfony/event-dispatcher": "^5.4|^6.0|^7.0",
-        "symfony/finder": "^5.4|^6.0|^7.0",
-        "symfony/string": "^5.4|^6.0|^7.0",
+        "symfony/config": "^5.4|^6.0|^7.0|^8.0",
+        "symfony/event-dispatcher": "^5.4|^6.0|^7.0|^8.0",
+        "symfony/finder": "^5.4|^6.0|^7.0|^8.0",
+        "symfony/string": "^5.4|^6.0|^7.0|^8.0",
         "symfony/translation-contracts": "^1|^2|^3"
     },
     "autoload": {
@@ -59,7 +59,7 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.4",
         "phpunit/phpunit": "^9.6",
-        "symfony/phpunit-bridge": "^5.4|^6.0|^7.0"
+        "symfony/phpunit-bridge": "^5.4|^6.0|^7.0|^8.0"
     },
     "scripts": {
         "analyse": "./vendor/bin/phpstan analyse --no-progress",

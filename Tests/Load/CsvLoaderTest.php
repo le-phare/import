@@ -290,7 +290,7 @@ class CsvLoaderTest extends TestCase
         fseek($handle, 0);
         $data = [];
 
-        while ($row = fgetcsv($handle)) {
+        while ($row = fgetcsv($handle, null, ',', '"', '')) {
             $data[] = $row;
         }
 
