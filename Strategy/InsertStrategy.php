@@ -55,24 +55,34 @@ class InsertStrategy implements StrategyInterface
         $sql = "INSERT INTO {$tablename} ({$columns})
                 SELECT {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}";
 
-        $this->connection->beginTransaction();
+        if (!$resource->isSharedConnection()) {
+            $this->connection->beginTransaction();
+        }
 
         try {
             $stmt = $this->connection->executeQuery($sql);
             $lines = $stmt->rowCount();
-            $this->connection->commit();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->commit();
+            }
         } catch (UniqueConstraintViolationException $exception) {
-            $this->connection->rollback();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->rollback();
+            }
             $lines = 0;
         } catch (NotNullConstraintViolationException $exception) {
-            $this->connection->rollback();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->rollback();
+            }
             $lines = 0;
 
             if (preg_match('/SQLSTATE[^"]*"([^"]*)"/xms', $exception->getMessage(), $matches)) {
                 throw new ImportException("Insert failed: not-null values found in \"{$matches[1]}\" column");
             }
         } catch (Exception $exception) {
-            $this->connection->rollback();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->rollback();
+            }
 
             throw $exception;
         }

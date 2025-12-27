@@ -74,9 +74,13 @@ class InsertOrUpdateStrategy implements StrategyInterface
                 SELECT {$distinct} {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}
                 ON DUPLICATE KEY UPDATE {$updateClause}";
 
-        $this->connection->beginTransaction();
+        if (!$resource->isSharedConnection()) {
+            $this->connection->beginTransaction();
+        }
         $this->connection->executeQuery($sql);
-        $this->connection->commit();
+        if (!$resource->isSharedConnection()) {
+            $this->connection->commit();
+        }
 
         // Because of bad results of PDOStatement::rowCount() for MySQL (at least)
         // we determine rowCount from select clause that has been inserted
@@ -123,13 +127,19 @@ class InsertOrUpdateStrategy implements StrategyInterface
                 SELECT {$distinct} {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}
                 ON CONFLICT {$conflictTargetClause} DO UPDATE SET {$updateClause}";
 
-        $this->connection->beginTransaction();
+        if (!$resource->isSharedConnection()) {
+            $this->connection->beginTransaction();
+        }
 
         try {
             $rowCount = $this->connection->executeStatement($sql);
-            $this->connection->commit();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->commit();
+            }
         } catch (Exception $exception) {
-            $this->connection->rollback();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->rollback();
+            }
 
             throw $exception;
         }

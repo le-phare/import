@@ -33,6 +33,7 @@ class Import implements ImportInterface
     protected StrategyRepositoryInterface $strategyRepository;
     protected LoadStrategyRepositoryInterface $loadStrategyRepository;
     protected ?\SplFileInfo $file = null;
+    private bool $isSharedConnection = false;
 
     /** @var ArrayCollection<int, LoaderInterface> */
     private ArrayCollection $loaders;
@@ -43,7 +44,8 @@ class Import implements ImportInterface
         StrategyRepositoryInterface $strategyRepository,
         LoadStrategyRepositoryInterface $loadStrategyRepository,
         ConfigurationInterface $configuration,
-        ?LoggerInterface $logger = null
+        ?LoggerInterface $logger = null,
+        bool $isSharedConnection = false
     ) {
         $this->configuration = $configuration;
         $this->connection = $connection;
@@ -51,6 +53,7 @@ class Import implements ImportInterface
         $this->strategyRepository = $strategyRepository;
         $this->loadStrategyRepository = $loadStrategyRepository;
         $this->logger = $logger ?? new NullLogger();
+        $this->isSharedConnection = $isSharedConnection;
         $this->loaders = new ArrayCollection();
     }
 
@@ -69,6 +72,7 @@ class Import implements ImportInterface
         $resources = [];
         foreach ($this->config['resources'] as $name => $resource) {
             $resource = new ImportResource($name, $resource);
+            $resource->setSharedConnection($this->isSharedConnection);
             if ($resource->isLoadable()) {
                 /** @var LoadStrategyInterface|null $loadStrategy */
                 $loadStrategy = $this->loadStrategyRepository->getLoadStrategy($resource->getConfig()['load']['strategy']);
@@ -287,11 +291,7 @@ class Import implements ImportInterface
             $connection->executeQuery("CREATE SCHEMA IF NOT EXISTS {$schema}");
         }
 
-        try {
-            $connection->executeQuery($platform->getDropTableSQL($resource->getTablename()));
-        } catch (DBALException|\Exception $e) {
-            // Do nothing
-        }
+        $connection->executeStatement(sprintf('DROP TABLE IF EXISTS %s', $resource->getTablename()));
 
         foreach ($platform->getCreateTableSQL($resource->getTable()) as $sql) {
             $connection->executeQuery($sql);
@@ -313,5 +313,10 @@ class Import implements ImportInterface
     public function getConfig(): Collection
     {
         return $this->config;
+    }
+
+    public function isSharedConnection(): bool
+    {
+        return $this->isSharedConnection;
     }
 }
