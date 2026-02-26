@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.4](https://github.com/le-phare/import/compare/v2.4.3...v2.4.4) (2026-02-26)
+
+
+### Bug Fixes
+
+* **import:** fix DirectoryNotFoundException on quarantine directory rotation ([#43](https://github.com/le-phare/import/issues/43)) ([3a9c12e](https://github.com/le-phare/import/commit/3a9c12e2c77f837939d8a270c5025944a2bbcf14))
+
 ## [2.4.3](https://github.com/le-phare/import/compare/v2.4.2...v2.4.3) (2025-12-08)
 
 
