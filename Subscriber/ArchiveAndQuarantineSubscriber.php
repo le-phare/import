@@ -131,6 +131,10 @@ class ArchiveAndQuarantineSubscriber implements EventSubscriberInterface
 
     protected function rotate(string $dir, int $rotation, LoggerInterface $logger): void
     {
+        if (!is_dir($dir)) {
+            return;
+        }
+
         $finder = new Finder();
 
         $finder = $finder
