@@ -71,14 +71,20 @@ class InsertIgnoreStrategy implements StrategyInterface
         $sql = "INSERT IGNORE INTO {$tablename} ({$columns})
                 SELECT {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}";
 
-        $this->connection->beginTransaction();
+        if (!$resource->isSharedConnection()) {
+            $this->connection->beginTransaction();
+        }
 
         try {
             $stmt = $this->connection->executeQuery($sql);
             $lines = $stmt->rowCount();
-            $this->connection->commit();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->commit();
+            }
         } catch (NotNullConstraintViolationException $exception) {
-            $this->connection->rollback();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->rollback();
+            }
             $lines = 0;
 
             if (preg_match('/SQLSTATE[^"]*"([^"]*)"/xms', $exception->getMessage(), $matches)) {
@@ -123,14 +129,20 @@ class InsertIgnoreStrategy implements StrategyInterface
                 SELECT {$tempColumns} FROM {$tempTablename} temp {$joins} {$whereClause}
                 ON CONFLICT {$conflictTargetClause} DO NOTHING";
 
-        $this->connection->beginTransaction();
+        if (!$resource->isSharedConnection()) {
+            $this->connection->beginTransaction();
+        }
 
         try {
             $stmt = $this->connection->executeQuery($sql);
             $rowCount = $stmt->rowCount();
-            $this->connection->commit();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->commit();
+            }
         } catch (Exception $exception) {
-            $this->connection->rollback();
+            if (!$resource->isSharedConnection()) {
+                $this->connection->rollback();
+            }
 
             throw $exception;
         }
