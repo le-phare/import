@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.5](https://github.com/le-phare/import/compare/v2.4.4...v2.4.5) (2026-11-18)
+
+
+### Bug Fixes
+
+* **handler:** initialize nextRotation in setFilenameFormat for monolog 3.13 ([3804d2d](https://github.com/le-phare/import/commit/3804d2d12fb3420a86ab721c26464eff59521094))
+
+
+### Miscellaneous Chores
+
+* **deps:** allow phpspreadsheet 2 to 5 in dev ([db6823b](https://github.com/le-phare/import/commit/db6823bfd14de0598676f3b0004c9117927014f4))
+
 ## [2.4.4](https://github.com/le-phare/import/compare/v2.4.3...v2.4.4) (2026-02-26)
 
 
