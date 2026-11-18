@@ -18,6 +18,8 @@ trait RotatingFileHandlerTrait
         $this->filenameFormat = $filenameFormat;
         $this->dateFormat = $dateFormat;
         $this->url = $this->getTimedFilename();
+        // Monolog >= 3.13 initializes nextRotation here instead of in the constructor
+        $this->nextRotation = method_exists($this, 'getNextRotation') ? $this->getNextRotation() : new \DateTimeImmutable('tomorrow');
         $this->close();
 
         return $this;
