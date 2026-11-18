@@ -53,7 +53,7 @@
         "friendsofphp/php-cs-fixer": "^3.3",
         "jangregor/phpstan-prophecy": "^1.0",
         "php-mock/php-mock-prophecy": "^0.1.1",
-        "phpoffice/phpspreadsheet": "^1.19",
+        "phpoffice/phpspreadsheet": "^1.19|^2.0|^3.0|^4.0|^5.0",
         "phpspec/prophecy": "^1.10",
         "phpspec/prophecy-phpunit": "^2.2",
         "phpstan/extension-installer": "^1.1",
